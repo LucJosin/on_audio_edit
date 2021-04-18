@@ -97,14 +97,14 @@ All types of methods on this plugin:
 
 ## TagsType:
 
-|  Types  |    |    |    |
+|  Types  |  Types  |  Types  |  Types  |
 |--------------|--------------|--------------|--------------| 
 | `ALBUM_ARTIST` | `ORIGINAL_ARTIST` | `ORIGINAL_ALBUM` | `TRACK` | <br>
 | `ARTIST` | `ORIGINAL_LYRICIST` | `LYRICS` | `TITLE` | <br>
 | `ARTISTS` | `ORIGINAL_YEAR` | `LANGUAGE` | `TEMPO` | <br>
 | `BEATS_PER_MINUTE` | `PRODUCER` | `KEY` | `TAGS` | <br>
 | `COMPOSER` | `QUALITY` | `ISRC` | `SUBTITLE` | <br>
-| `COUNTRY` | `RATING` | `ID` |
+| `COUNTRY` | `RATING` | `ID` | `LENGTH` | <br>
 | `GENRE` | `RECORD_LABEL` | `YEAR` | <br>
 
 ## Examples:
