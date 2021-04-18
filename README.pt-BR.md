@@ -5,7 +5,7 @@
 [![Flutter](https://img.shields.io/badge/Language-Flutter%20%7C%20Null--Safety-9cf?logo=flutter&style=flat-square)](https://www.flutter.dev/)
 [![Kotlin](https://img.shields.io/badge/Language-Kotlin-9cf?logo=kotlin&style=flat-square)](https://kotlinlang.org/)
 
-`on_audio_edit` é um [Flutter](https://flutter.dev/) Plugin usado para edita audios/songs 🎶 informações/tags. <br>
+`on_audio_edit` é um [Flutter](https://flutter.dev/) Plugin usado para editar e ler audios/songs 🎶 informações/tags [Mp3, OggVorbis, Wav, etc...]. <br>
 
 Esse Plugin usa [AdrienPoupa:jaudiotagger](https://github.com/AdrienPoupa/jaudiotagger) como dependência para editar audios tags.
 
