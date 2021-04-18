@@ -5,41 +5,41 @@
 [![Flutter](https://img.shields.io/badge/Language-Flutter%20%7C%20Null--Safety-9cf?logo=flutter&style=flat-square)](https://www.flutter.dev/)
 [![Kotlin](https://img.shields.io/badge/Language-Kotlin-9cf?logo=kotlin&style=flat-square)](https://kotlinlang.org/)
 
-`on_audio_edit` is a [Flutter](https://flutter.dev/) Plugin used to edit audios/songs 🎶 infos/tags. <br>
+`on_audio_edit` é um [Flutter](https://flutter.dev/) Plugin usado para edita audios/songs 🎶 informações/tags. <br>
 
-This Plugin use [AdrienPoupa:jaudiotagger](https://github.com/AdrienPoupa/jaudiotagger) as dependency to edit audios tags.
+Esse Plugin usa [AdrienPoupa:jaudiotagger](https://github.com/AdrienPoupa/jaudiotagger) como dependência para editar audios tags.
 
-## Help:
+## Ajuda:
 
-**Any problem? [Issues](https://github.com/LucasPJS/on_audio_edit/issues)** <br>
-**Any suggestion? [Pull request](https://github.com/LucasPJS/on_audio_edit/pulls)**
+**Algum problema? [Issues](https://github.com/LucasPJS/on_audio_edit/issues)** <br>
+**Alguma sugestão? [Pull request](https://github.com/LucasPJS/on_audio_edit/pulls)**
 
-### Translations:
+### Traduções :
 
-NOTE: Feel free to help with readme translations
+NOTE: Fique à vontade para ajudar nas traduções
 
-* [English](README.md)
-* [Portuguese](README.pt-BR.md)
+* [Inglês](README.md)
+* [Português](README.pt-BR.md)
 
-### Topics:
+## Tópicos:
 
 <!-- * [Gif Examples](#gif-examples) -->
-* [How to Install](#how-to-install)
-* [How to use](#how-to-use)
+* [Como instalar](#como-instalar)
+* [Como usar](#como-usar)
 * [TagsType](#tagstype)
-* [Examples](#examples)
-* [License](#license)
+* [Exemplos](#exemplos)
+* [Licença](#licença)
 
-## How to Install:
-Add the following code to your `pubspec.yaml`:
+## Como instalar:
+Adicione o seguinte codigo para seu `pubspec.yaml`:
 ```yaml
 dependencies:
   on_audio_edit: ^1.0.0
 ```
 
-#### Request Permission:
-You will need add the following code to your `AndroidManifest.xml` <br>
-**Note: This Plugin don't have a built-in request permission**
+#### Solicitar Permissões:
+Se você quer usar a solicitação de permissões interna, irá precisar adicionar os seguintes codigos para seu `AndroidManifest.xml` <br>
+**Note: Esse Plugin não tem um sistema de permissão interno.**
 ```xml
 <manifest> ...
 
@@ -50,7 +50,7 @@ You will need add the following code to your `AndroidManifest.xml` <br>
 ```
 
 #### Legacy External Storage:
-If you are using/want to use `Android 10` will need add the following code to your `AndroidManifest.xml` <br>
+Se você está usando/quer usar `Android 10` irá precisar adicionar os seguintes codigos para seu `AndroidManifest.xml` <br>
 ```xml
 <application> ...
 
@@ -59,23 +59,23 @@ If you are using/want to use `Android 10` will need add the following code to yo
 </application>
 ```
 
-## Some Features:
+## Algumas qualidades:
 
-* Read Audios/Songs tags.
-* Edit Audios/Songs tags.
-* **Supports Android 10 and above**.
+* Ler Audios/Songs tags.
+* Editar Audios/Songs tags.
+* **Suporta o Android 10 e superior.**.
 
-## TODO:
+## Para fazer:
 
-* Add better performance for all plugin.
-* Fix bugs.
+* Adicionar uma melhor performace para todo o plugin.
+* Arrumar erros.
 
-## How to use:
+## Como usar:
 
 ```dart
-OnAudioEdit() // The main method to start using the plugin.
+OnAudioEdit() // O comando principal para usar o plugin.
 ```
-All types of methods on this plugin:
+Todos os tipos de métodos nesse plugin:
 
 |  Methods  |   Parameters   |   Return   |
 |--------------|-----------------|-----------------|
@@ -93,7 +93,7 @@ All types of methods on this plugin:
 | [`requestComplexPermission`]() | **[Q]** | `bool` | <br>
 | [`requestComplexPermission`]() | **[Q]** | `bool` | <br>
 
-**[Q]** -> Only necessary on Android 10 or above.
+**[Q]** -> Apenas necessário no Android 10 ou superior.
 
 ## TagsType:
 
@@ -107,7 +107,7 @@ All types of methods on this plugin:
 | `COUNTRY` | `RATING` | `ID` |
 | `GENRE` | `RECORD_LABEL` | `YEAR` | <br>
 
-## Examples:
+## Exemplos:
 
 #### readAudio
 ```dart
@@ -118,7 +118,7 @@ All types of methods on this plugin:
 ```
 
 #### readAllAudio
-This method read all possible info from a audio. See all list in: [AllTags](#lib/details/types/tag_type.dart)
+Esse método ler toda informação possível de um audio. Veja toda a lista em: [AllTags](#lib/details/types/tag_type.dart)
 ```dart
   Map<dynamic, dynamic> song = await OnAudioEdit().readAllAudio(data);
   var songInfo1 = song["MIXER"];
@@ -169,7 +169,7 @@ This method read all possible info from a audio. See all list in: [AllTags](#lib
 ```
 
 #### editAudios
-⚠ **Note: This method isn't implemented on Android 10 or above. Instead use: [editAudio](#editaudio)**
+⚠ **Note: Esse método não está funcionando no Android 10 ou superior. Use: [editAudio](#editaudio)**
 ```dart
   // Tags
   List<<Map<TagsType, dynamic>> tags = [];
@@ -189,7 +189,7 @@ This method read all possible info from a audio. See all list in: [AllTags](#lib
 ```
 
 #### editAudio
-⚠ **Note: If openFilePicker is false, imagePath can't be null.**
+⚠ **Note: Se openFilePicker é falso, imagePath não pode ser nulo.**
 ```dart
   // Parameters: openFilePicker, imagePath, format, size, description
   // DEFAULT: true, null, ArtworkFormat.JPEG, 24, "artwork"
@@ -197,9 +197,9 @@ This method read all possible info from a audio. See all list in: [AllTags](#lib
   print(song); //True or False
 ```
 
-## LICENSE:
+## LICENÇA:
 
-* [LICENSE](https://github.com/LucasPJS/on_audio_edit/blob/main/LICENSE)
+* [LICENÇA  ](https://github.com/LucasPJS/on_audio_edit/blob/main/LICENSE)
 
-> * [Back to top](#on_audio_edit)
+> * [Voltar ao Topo](#on_audio_edit)
 
