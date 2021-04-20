@@ -19,11 +19,26 @@ class AudiosTagModel {
   /// Return song [beatsPerMinutes]
   String get beatsPerMinutes => _info["BEATS_PER_MINUTE"];
 
+  /// Return song [bitrate]
+  String get bitrate => _info["BITRATE"];
+
+  /// Return song [channels]
+  String get channels => _info["CHANNELS"];
+
   /// Return song [composer]
   String get composer => _info["COMPOSER"];
 
   /// Return song [country]
   String get country => _info["COUNTRY"];
+
+  /// Return song [country]
+  String get coverArt => _info["COVER_ART"];
+
+  /// Return song [country]
+  String get firstArtwork => _info["FIRST_ARTWORK"];
+
+  /// Return song [format]
+  String get format => _info["FORMAT"];
 
   /// Return song [genre]
   String get genre => _info["GENRE"];
@@ -39,6 +54,9 @@ class AudiosTagModel {
 
   /// Return song [language]
   String get language => _info["LANGUAGE"];
+
+  /// Return song [length]
+  String get length => _info["LENGTH"];
 
   /// Return song [lyrics]
   String get lyrics => _info["LYRICS"];
@@ -67,6 +85,9 @@ class AudiosTagModel {
   /// Return song [recordLabel]
   String get recordLabel => _info["RECORD_LABEL"];
 
+  /// Return song [sampleRate]
+  String get sampleRate => _info["SAMPLE_RATE"];
+
   /// Return song [subTitle]
   String get subTitle => _info["SUBTITLE"];
 
@@ -81,6 +102,9 @@ class AudiosTagModel {
 
   /// Return song [track]
   String get track => _info["TRACK"];
+
+  /// Return song [type]
+  String get type => _info["TYPE"];
 
   /// Return song [year]
   String get year => _info["YEAR"];

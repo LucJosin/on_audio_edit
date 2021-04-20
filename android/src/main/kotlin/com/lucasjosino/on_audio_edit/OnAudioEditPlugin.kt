@@ -20,7 +20,9 @@ import android.os.Build
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
-import com.lucasjosino.on_audio_edit.edits.*
+import com.lucasjosino.on_audio_edit.methods.delete.OnAudioDelete
+import com.lucasjosino.on_audio_edit.methods.edits.*
+import com.lucasjosino.on_audio_edit.methods.read.OnAudioRead
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
@@ -99,6 +101,20 @@ class OnAudioEditPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, Plugin
             OnArtworkEdit10(context, activity).editArtwork(result, call, null)
           else OnArtworkEdit(context).editArtwork(result, call, null)
         }
+
+        // Delete methods
+        "deleteArtwork" -> if (Build.VERSION.SDK_INT >= 29)
+          result.error(channelError, "Unfortunately this method isn't implemented on Android 10 and above, " +
+                "If you wanna help: https://github.com/LucasPJS/on_audio_edit", null)
+        else OnAudioDelete(context).deleteArtwork(result, call)
+        "deleteArtworks" -> if (Build.VERSION.SDK_INT >= 29)
+          result.error(channelError, "Unfortunately this method isn't implemented on Android 10 and above, " +
+                "If you wanna help: https://github.com/LucasPJS/on_audio_edit", null)
+        else OnAudioDelete(context).deleteArtworks(result, call)
+        "deleteAudio" -> if (Build.VERSION.SDK_INT >= 29)
+          result.error(channelError, "Unfortunately this method isn't implemented on Android 10 and above, " +
+                  "If you wanna help: https://github.com/LucasPJS/on_audio_edit", null)
+          else OnAudioDelete(context).audioDelete(result, call)
 
         // Image Picker
         "getImagePath" -> getImageForArtwork(1)
@@ -241,7 +257,7 @@ class OnAudioEditPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, Plugin
       }
       onImagePickerExternalCode -> {
         if (resultCode == RESULT_OK && resultData != null) {
-          result.success(resultData.data)
+          result.success(resultData.data.toString())
           return true
         } else result.error(channelError, "[OIPEC] - [resultCode] or [resultData] returned null.", null) ; return false
       }

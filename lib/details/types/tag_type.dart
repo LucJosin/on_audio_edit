@@ -1,87 +1,105 @@
 part of on_audio_edit;
 
 /// All the songs tags type.
-enum TagsType {
-  /// ALBUM_ARTIST
+enum TagType {
+  ///
   ALBUM_ARTIST,
 
-  /// ARTIST
+  ///
   ARTIST,
 
-  /// ARTISTS
+  ///
   ARTISTS,
 
-  /// BEATS_PER_MINUTE
+  ///
   BEATS_PER_MINUTE,
 
-  /// COMPOSER
+  ///
+  BITRATE,
+
+  ///
+  CHANNELS,
+
+  ///
   COMPOSER,
 
-  /// COUNTRY
+  ///
   COUNTRY,
 
-  /// GENRE
+  ///
+  COVER_ART,
+
+  ///
+  FIRST_ARTWORK,
+
+  ///
+  FORMAT,
+
+  ///
   GENRE,
 
-  /// ID
-  ID,
-
-  /// ISRC
+  ///
   ISRC,
 
-  /// KEY
+  ///
   KEY,
 
-  /// LANGUAGE
+  ///
   LANGUAGE,
 
-  /// LYRICS
+  ///
+  LENGTH,
+
+  ///
   LYRICS,
 
-  /// ORIGINAL_ALBUM
+  ///
   ORIGINAL_ALBUM,
 
-  /// ORIGINAL_ARTIST
+  ///
   ORIGINAL_ARTIST,
 
-  /// ORIGINAL_LYRICIST
+  ///
   ORIGINAL_LYRICIST,
 
-  /// ORIGINAL_YEAR
+  ///
   ORIGINAL_YEAR,
 
-  /// PRODUCER
+  ///
   PRODUCER,
 
-  /// QUALITY
+  ///
   QUALITY,
 
-  /// RATING
+  ///
   RATING,
 
-  /// RECORD_LABEL
+  ///
   RECORD_LABEL,
 
-  /// SUBTITLE
+  ///
+  SAMPLE_RATE,
+
+  ///
   SUBTITLE,
 
-  /// TAGS
+  ///
   TAGS,
 
-  /// TEMPO
+  ///
   TEMPO,
 
-  /// TITLE
+  ///
   TITLE,
 
-  /// TRACK
+  ///
   TRACK,
 
-  /// YEAR
-  YEAR,
+  ///
+  TYPE,
 
-  /// LENGTH
-  LENGTH,
+  ///
+  YEAR,
 }
 
 // All Tags

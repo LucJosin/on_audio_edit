@@ -1,6 +1,7 @@
-package com.lucasjosino.on_audio_edit.edits
+package com.lucasjosino.on_audio_edit.methods.edits
 
 import android.content.Context
+import android.media.MediaScannerConnection
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
@@ -64,6 +65,9 @@ class OnArtworkEdit(private val context: Context) {
         val audioSize = convertFileSize(audioFile.file.length())
         warningSizeCall(audioSize, data)
 
+        // Android < 29/Q needs a scan file to show changes
+        onScan(data, result)
+
         result.success(true)
     }
 
@@ -81,5 +85,10 @@ class OnArtworkEdit(private val context: Context) {
         }
         cursor?.close()
         return imageData
+    }
+
+    private fun onScan(audio: String, result: MethodChannel.Result) {
+        if (audio.isEmpty()) result.success(false)
+        MediaScannerConnection.scanFile(context, arrayOf(audio), null) { _, _ -> }
     }
 }

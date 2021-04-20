@@ -28,7 +28,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
 
   //
   late AnimationController _controller =
-      AnimationController(vsync: this, duration: Duration(seconds: 2));
+  AnimationController(vsync: this, duration: Duration(seconds: 2));
 
   //
   List<SongModel> songList = [];
@@ -122,7 +122,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                   onTap: () async {
                     Navigator.pop(context);
                     result =
-                        await OnAudioEdit().editArtwork(songList[index].data);
+                    await OnAudioEdit().editArtwork(songList[index].data);
                     setState(() {
                       _controller.forward();
                     });
@@ -169,13 +169,13 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
           actions: [
             MaterialButton(
               onPressed: () async {
-                Map<TagsType, dynamic> tag = {
-                  TagsType.TITLE: name.text,
-                  TagsType.ARTIST: artist.text,
+                Map<TagType, dynamic> tag = {
+                  TagType.TITLE: name.text,
+                  TagType.ARTIST: artist.text,
                 };
                 Navigator.pop(context);
                 result =
-                    await OnAudioEdit().editAudio(songList[index].data, tag);
+                await OnAudioEdit().editAudio(songList[index].data, tag);
                 setState(() {
                   _controller.forward();
                 });

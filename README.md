@@ -34,7 +34,7 @@ NOTE: Feel free to help with readme translations
 Add the following code to your `pubspec.yaml`:
 ```yaml
 dependencies:
-  on_audio_edit: ^1.0.0
+  on_audio_edit: ^1.0.2
 ```
 
 #### Request Permission:
@@ -68,6 +68,9 @@ If you are using/want to use `Android 10` will need add the following code to yo
 ## TODO:
 
 * Add better performance for all plugin.
+* Add `[deleteArtwork]` to Android 10 and above.
+* Add `[deleteArtworks]` to Android 10 and above.
+* Add `[deleteAudio]` to Android 10 and above.
 * Fix bugs.
 
 ## How to use:
@@ -80,32 +83,38 @@ All types of methods on this plugin:
 |  Methods  |   Parameters   |   Return   |
 |--------------|-----------------|-----------------|
 | [`readAudio`](#readaudio) | `(String)` | `Map<dynamic, dynamic>` | <br>
-| [`readAllAudio`](#readallaudios) | `(String)` | `Map<TagsType, dynamic>` | <br>
+| [`readAllAudio`](#readallaudio) | `(String)` | `Map<TagsType, dynamic>` | <br>
 | [`readAudios`](#readaudios) | `(List<String>)` | `List<AudiosTagModel>` | <br>
 | [`readSingleAudioTag`](#readsingleaudiotag) | `(String, TagsType)` | `String` | <br>
 | [`readSpecificsAudioTags`](#readspecificsaudiotags) | `(String, List<TagsType>)` | `Map<dynamic, dynamic>` | <br>
 | [`editAudio`](#editaudio) | `(String, Map<TagsType, dynamic>)` | `bool` | <br>
 | [`editAudios`](#editaudios) | `(List<String>, List<Map<TagsType, dynamic>>)` | `bool` | <br>
 | [`editArtwork`](#editartwork) | `(String, bool, String, ArtworkFormat, int, String)` | `bool` | <br>
+| [`deleteArtwork`]() | **[W]**`(String)` | `bool` | <br>
+| [`deleteArtworks`]() | **[W]**`(List<String>)` | `bool` | <br>
+| [`deleteAudio`]() | **[W]**`(String)` | `bool` | <br>
 | [`getImagePath`]() |  | `String` | <br>
 | [`permissionsStatus`]() |  | `bool` | <br>
 | [`resetComplexPermission`]() | **[Q]** | `bool` | <br>
 | [`requestComplexPermission`]() | **[Q]** | `bool` | <br>
 | [`requestComplexPermission`]() | **[Q]** | `bool` | <br>
 
-**[Q]** -> Only necessary on Android 10 or above.
+**[Q]** -> Only necessary on Android 10 or above. <br>
+**[W]** -> These methods are currently only implemented on Android 9 or below.
 
 ## TagsType:
 
-|  Types  |  Types  |  Types  |  Types  |
-|--------------|--------------|--------------|--------------| 
-| `ALBUM_ARTIST` | `ORIGINAL_ARTIST` | `ORIGINAL_ALBUM` | `TRACK` | <br>
-| `ARTIST` | `ORIGINAL_LYRICIST` | `LYRICS` | `TITLE` | <br>
-| `ARTISTS` | `ORIGINAL_YEAR` | `LANGUAGE` | `TEMPO` | <br>
-| `BEATS_PER_MINUTE` | `PRODUCER` | `KEY` | `TAGS` | <br>
-| `COMPOSER` | `QUALITY` | `ISRC` | `SUBTITLE` | <br>
-| `COUNTRY` | `RATING` | `ID` | `LENGTH` | <br>
-| `GENRE` | `RECORD_LABEL` | `YEAR` | <br>
+|  Types  |  Types  |  Types  |  Types  |  Types  |
+|--------------|--------------|--------------|--------------|--------------|  
+| `ALBUM_ARTIST` | `ORIGINAL_ARTIST` | `ORIGINAL_ALBUM` | `TRACK` | `FORMAT` | <br>
+| `ARTIST` | `ORIGINAL_LYRICIST` | `LYRICS` | `TITLE` | `SAMPLE_RATE` | <br>
+| `ARTISTS` | `ORIGINAL_YEAR` | `LANGUAGE` | `TEMPO` | `CHANNELS` | <br>
+| `BEATS_PER_MINUTE` | `PRODUCER` | `KEY` | `TAGS` | `COVER_ART` | <br>
+| `COMPOSER` | `QUALITY` | `ISRC` | `SUBTITLE` | `TYPE` | <br>
+| `COUNTRY` | `RATING` | `FIRST_ARTWORK` | `LENGTH` |
+| `GENRE` | `RECORD_LABEL` | `YEAR` | `BITRATE` | <br>
+
+**Using [readAllAudio](#readallaudio) you can get more infos about audio. See all list in: [AllTags](https://github.com/LucasPJS/on_audio_edit/blob/main/lib/details/types/tag_type.dart)**
 
 ## Examples:
 
@@ -118,7 +127,7 @@ All types of methods on this plugin:
 ```
 
 #### readAllAudio
-This method read all possible info from a audio. See all list in: [AllTags](#lib/details/types/tag_type.dart)
+This method read all possible info from a audio. See all list in: [AllTags](https://github.com/LucasPJS/on_audio_edit/blob/main/lib/details/types/tag_type.dart)
 ```dart
   Map<dynamic, dynamic> song = await OnAudioEdit().readAllAudio(data);
   var songInfo1 = song["MIXER"];

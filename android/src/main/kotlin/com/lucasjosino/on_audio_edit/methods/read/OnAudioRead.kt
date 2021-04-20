@@ -1,12 +1,14 @@
-package com.lucasjosino.on_audio_edit.edits
+package com.lucasjosino.on_audio_edit.methods.read
 
+import android.util.Log
 import com.lucasjosino.on_audio_edit.types.checkTag
+import com.lucasjosino.on_audio_edit.utils.checkAndGetExtraInfo
 import com.lucasjosino.on_audio_edit.utils.getAllProjection
+import com.lucasjosino.on_audio_edit.utils.getExtraInfo
 import com.lucasjosino.on_audio_edit.utils.getProjection
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import org.jaudiotagger.audio.AudioFileIO
-import org.jaudiotagger.audio.mp3.MP3File
 import org.jaudiotagger.tag.FieldKey
 import java.io.File
 
@@ -25,13 +27,10 @@ class OnAudioRead {
         // Getting all tags
         val tagsData: MutableMap<String, Any> = HashMap()
         for (tag in getProjection()) tagsData[tag.name] = audioTag.getValue(tag, 0).orEmpty()
+        Log.i("CheckCoverArt", tagsData["COVER_ART"].toString())
 
-        // ID Tag
-        val mp3File = MP3File(data)
-        if (mp3File.hasID3v1Tag()) tagsData["ID"] = "ID3v1Tag" else tagsData["ID"] = "ID3v2Tag"
-
-        // Length
-        tagsData["LENGTH"] = audioFile.file.length().toString()
+        // Extra information
+        tagsData.putAll(checkAndGetExtraInfo(audioFile))
 
         // Sending to Dart
         result.success(tagsData)
@@ -73,12 +72,8 @@ class OnAudioRead {
             val tagsData: MutableMap<String, Any> = HashMap()
             for (tag in getProjection()) tagsData[tag.name] = audioTag.getValue(tag, 0).orEmpty()
 
-            // ID Tag
-            val mp3File = MP3File(pathData)
-            if (mp3File.hasID3v1Tag()) tagsData["ID"] = "ID3v1Tag" else tagsData["ID"] = "ID3v2Tag"
-
-            // Length
-            tagsData["LENGTH"] = audioFile.file.length().toString()
+            // Extra information
+            tagsData.putAll(checkAndGetExtraInfo(audioFile))
 
             tagsList.add(tagsData)
         }
@@ -98,10 +93,14 @@ class OnAudioRead {
         val audioTag = audioFile.tag
 
         // Getting specific tag
-        val mp3File = MP3File(data)
         val resultTag = when (tag) {
-            7 -> if (mp3File.hasID3v1Tag()) "ID3v1Tag" else "ID3v2Tag"
-            26 -> audioFile.file.length().toString()
+            4 -> audioFile.audioHeader.bitRate
+            5 -> audioFile.audioHeader.channels
+            9 -> audioTag.firstArtwork.binaryData.toString()
+            10 -> audioFile.audioHeader.format
+            15 -> audioFile.audioHeader.trackLength.toString()
+            25 -> audioFile.audioHeader.sampleRate
+            31 -> audioFile.audioHeader.encodingType
             else -> audioTag.getValue(checkTag(tag), 0).orEmpty()
         }
 
@@ -118,7 +117,7 @@ class OnAudioRead {
         // Converting int to FieldKey
         val getTags: ArrayList<FieldKey> = ArrayList()
         tags.forEach {
-            getTags.add(checkTag(it))
+            if (checkTag(it) != null) getTags.add(checkTag(it)!!)
         }
 
         // Setup
@@ -130,16 +129,9 @@ class OnAudioRead {
         val tagsData: MutableMap<String, Any> = HashMap()
         for (tag in getTags) tagsData[tag.name] = audioTag.getValue(tag, 0).orEmpty()
 
-        if (tags.contains(7)) {
-            // ID Tag
-            val mp3File = MP3File(data)
-            if (mp3File.hasID3v1Tag()) tagsData["ID"] = "ID3v1Tag"
-            else tagsData["ID"] = "ID3v2Tag"
-        }
-
-        if (tags.contains(26)) {
-            // Length
-            tagsData["LENGTH"] = audioFile.file.length().toString()
+        // Adding extra info using the worst method :P
+        tags.forEach {
+            if (checkTag(it) == null) getExtraInfo(audioFile, it, audioTag)
         }
 
         // Sending to Dart

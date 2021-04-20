@@ -121,7 +121,7 @@ class OnAudioEdit {
   /// * Calling any method without [READ] and [WRITE] permission will throw a error.
   /// Use [permissionsStatus] to see permissions status.
   /// * Most audios have no information other than the [title] and [artist].
-  Future<String> readSingleAudioTag(String data, TagsType tag) async {
+  Future<String> readSingleAudioTag(String data, TagType tag) async {
     final String resultSingleAudioTag =
         await _channel.invokeMethod("readSingleAudioTag", {
       "data": data,
@@ -157,7 +157,7 @@ class OnAudioEdit {
   /// * Most audios have no information other than the [title] and [artist].
   /// * This method return a [Map<dynamic, dynamic>].
   Future<Map<dynamic, dynamic>> readSpecificsAudioTags(
-      String data, List<TagsType> tags) async {
+      String data, List<TagType> tags) async {
     List<int> tagsIndex = [];
     tags.forEach((it) {
       tagsIndex.add(it.index);
@@ -202,7 +202,7 @@ class OnAudioEdit {
   /// but you can anticipate the request using [requestComplexPermission].
   /// The request status and folder permission will be saved as persistent but
   /// if user uninstall the app, this permission will be removed.
-  Future<bool> editAudio(String data, Map<TagsType, dynamic> tags) async {
+  Future<bool> editAudio(String data, Map<TagType, dynamic> tags) async {
     Map<int, dynamic> finalTags = {};
     tags.forEach((key, value) {
       finalTags[key.index] = value;
@@ -256,7 +256,7 @@ class OnAudioEdit {
   /// The request status and folder permission will be saved as persistent but
   /// if user uninstall the app, this permission will be removed.
   Future<bool> editAudios(
-      List<String> data, List<Map<TagsType, dynamic>> tags) async {
+      List<String> data, List<Map<TagType, dynamic>> tags) async {
     List<Map<int, dynamic>> finalList = [];
     tags.forEach((it1) {
       Map<int, dynamic> finalTags = {};
@@ -322,6 +322,57 @@ class OnAudioEdit {
     return resultEditArt;
   }
 
+  /// Used to delete audio artwork.
+  ///
+  /// /// Parameter:
+  ///
+  /// * [data] is used to find multiples audios data.
+  ///
+  /// Important:
+  ///
+  /// * This method will always return a bool.
+  /// * This method only works on Android 9 or below (later i will add support android 10).
+  /// * If return true delete works, else delete found a problem.
+  Future<bool> deleteArtwork(String data) async {
+    final bool resultDeleteArt =
+        await _channel.invokeMethod("deleteArtwork", {"data": data});
+    return resultDeleteArt;
+  }
+
+  /// Used to delete multiples audios artworks.
+  ///
+  /// /// Parameter:
+  ///
+  /// * [data] is used to find multiples audios data.
+  ///
+  /// Important:
+  ///
+  /// * This method will always return a bool.
+  /// * This method only works on Android 9 or below (later i will add support android 10).
+  /// * If return true delete works, else delete found a problem.
+  Future<bool> deleteArtworks(List<String> data) async {
+    final bool resultDeleteArts =
+        await _channel.invokeMethod("deleteArtworks", {"data": data});
+    return resultDeleteArts;
+  }
+
+  /// Used to delete specific audio from device.
+  ///
+  /// /// Parameter:
+  ///
+  /// * [data] is used to find multiples audios data.
+  ///
+  /// Important:
+  ///
+  /// * This method will always return a bool.
+  /// * This method only works on Android 9 or below (later i will add support android 10).
+  /// * If return true delete works, else delete found a problem.
+  Future<bool> deleteAudio(String data) async {
+    final bool resultDelete =
+        await _channel.invokeMethod("deleteAudio", {"data": data});
+    return resultDelete;
+  }
+
   /// Used to check Android permissions status.
   ///
   /// Important:
@@ -379,8 +430,9 @@ class OnAudioEdit {
   }
 
   /// Used to return a converted value from file length.
-  int convertLengthToMb(int length) {
-    int firstConvert = (length / 1024) as int;
-    return (firstConvert / 1024) as int;
+  double convertLengthToMb(int length, bool roundNum) {
+    var num = roundNum == true ? 100 : 10;
+    double firstConvert = length / 1000;
+    return (firstConvert / 1000 * num).roundToDouble() / num;
   }
 }

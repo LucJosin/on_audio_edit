@@ -1,4 +1,4 @@
-package com.lucasjosino.on_audio_edit.edits
+package com.lucasjosino.on_audio_edit.methods.edits
 
 import android.annotation.SuppressLint
 import android.app.Activity

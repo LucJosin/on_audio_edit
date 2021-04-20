@@ -10,13 +10,18 @@ private var projection = arrayOf(
         FieldKey.ARTIST,
         FieldKey.ARTISTS,
         FieldKey.BPM,
+//            FieldKey.BITRATE, 4
+//            FieldKey.CHANNELS, 5
         FieldKey.COMPOSER,
         FieldKey.COUNTRY,
+        FieldKey.COVER_ART,
+//            FieldKey.FIRST_ARTWORK, 9
+//            FieldKey.FORMAT, 10
         FieldKey.GENRE,
-//            FieldKey.ID,
         FieldKey.ISRC,
         FieldKey.KEY,
         FieldKey.LANGUAGE,
+//            FieldKey.LENGTH, 15
         FieldKey.LYRICS,
         FieldKey.ORIGINAL_ALBUM,
         FieldKey.ORIGINAL_ARTIST,
@@ -26,11 +31,13 @@ private var projection = arrayOf(
         FieldKey.QUALITY,
         FieldKey.RATING,
         FieldKey.RECORD_LABEL,
+//            FieldKey.SAMPLE_RATE, 25
         FieldKey.SUBTITLE,
         FieldKey.TAGS,
         FieldKey.TEMPO,
         FieldKey.TITLE,
         FieldKey.TRACK,
+//            FieldKey.TYPE, 31
         FieldKey.YEAR
 )
 private var allProjection = arrayOf(

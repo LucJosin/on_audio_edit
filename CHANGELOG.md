@@ -1,3 +1,21 @@
+## [1.0.2] - [04.20.2021]
+### Features
+#### Dart/Kotlin
+- Added `[deleteArtwork]`, `[deleteArtworks]` and `[deleteAudio]` **[Currently only on Android 9 or below.]**.
+- Added `[BITRATE]`, `[FORMAT]`, `[SAMPLE_RATE]`, `[CHANNELS]`, `[COVER_ART]`, `[TYPE]`, `[FIRST_ARTWORK]` to `[TagType]` and `[AudiosTagModel]`.
+
+### Fixes
+#### Kotlin
+- Some fixes
+
+### Changes
+#### Dart/Kotlin
+- Changed `[TagsType]` to `[TagType]`.
+- Removed `[ID]` from `[TagType]`.
+
+### Documentation
+- Updated `README` documentation.
+
 ## [1.0.0] - [04.18.2021]
 ### Release
 

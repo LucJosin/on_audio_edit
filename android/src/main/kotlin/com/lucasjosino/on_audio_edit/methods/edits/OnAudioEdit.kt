@@ -1,4 +1,4 @@
-package com.lucasjosino.on_audio_edit.edits
+package com.lucasjosino.on_audio_edit.methods.edits
 
 import android.content.Context
 import android.media.MediaScannerConnection
@@ -30,7 +30,7 @@ class OnAudioEdit(private val context: Context) {
         // Converting int to FieldKey
         val getTagsAndInfo: MutableMap<FieldKey, Any> = EnumMap(org.jaudiotagger.tag.FieldKey::class.java)
         mapTagsAndInfo.forEach { keyOrValue ->
-            getTagsAndInfo[checkTag(keyOrValue.key)] = keyOrValue.value
+            if (checkTag(keyOrValue.key) != null) getTagsAndInfo[checkTag(keyOrValue.key)!!] = keyOrValue.value
         }
 
         // Setup
@@ -80,7 +80,7 @@ class OnAudioEdit(private val context: Context) {
 
             // Get each info inside map
             it1.forEach { it2 ->
-                getTagsAndInfo[checkTag(it2.key)] = it2.value
+                if (checkTag(it2.key) != null) getTagsAndInfo[checkTag(it2.key)!!] = it2.value
             }
 
             // Looping until get the last path

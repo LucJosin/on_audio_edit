@@ -1,4 +1,4 @@
-package com.lucasjosino.on_audio_edit.edits
+package com.lucasjosino.on_audio_edit.methods.edits
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -51,7 +51,7 @@ class OnAudioEdit10(private val context: Context, private val activity: Activity
         // Converting int to FieldKey
         this.getTagsAndInfo = EnumMap(FieldKey::class.java)
         mapTagsAndInfo.forEach { keyOrValue ->
-            getTagsAndInfo[checkTag(keyOrValue.key)] = keyOrValue.value
+            if (checkTag(keyOrValue.key) != null) getTagsAndInfo[checkTag(keyOrValue.key)!!] = keyOrValue.value
         }
 
         // Do everything in background to avoid bad performance.
