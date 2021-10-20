@@ -1,10 +1,15 @@
 /*
+=============
 Author: Lucas Josino
 Github: https://github.com/LucasPJS
-Plugin: on_audio_edit
+Website: https://lucasjosino.com/
+=============
+Plugin/Id: on_audio_edit#3
 Homepage: https://github.com/LucasPJS/on_audio_edit
-Copyright: © 2021, Lucas Josino. All rights reserved.
+Pub: https://pub.dev/packages/on_audio_edit
 License: https://github.com/LucasPJS/on_audio_edit/blob/main/LICENSE
+Copyright: © 2021, Lucas Josino. All rights reserved.
+=============
 */
 
 part of on_audio_edit;
@@ -12,8 +17,8 @@ part of on_audio_edit;
 ///Interface and Main method for use on_audio_edit
 class OnAudioEdit {
   //Dart <-> Kotlin communication
-  static const String _CHANNEL_ID = "com.lucasjosino.on_audio_edit";
-  static const MethodChannel _channel = const MethodChannel(_CHANNEL_ID);
+  static const String channelId = "com.lucasjosino.on_audio_edit";
+  static const MethodChannel _channel = MethodChannel(channelId);
 
   /// Used to return unique song info.
   ///
@@ -91,12 +96,12 @@ class OnAudioEdit {
   /// * Calling any method without [READ] and [WRITE] permission will throw a error.
   /// Use [permissionsStatus] to see permissions status.
   /// * Most audios have no information other than the [title] and [artist].
-  Future<List<AudiosTagModel>> readAudios(List<String> data) async {
+  Future<List<AudioModel>> readAudios(List<String> data) async {
     final List<dynamic> resultReadAudio =
         await _channel.invokeMethod("readAudios", {
       "data": data,
     });
-    return resultReadAudio.map((e) => AudiosTagModel(e)).toList();
+    return resultReadAudio.map((e) => AudioModel(e)).toList();
   }
 
   /// Used to return unique song tag.
@@ -159,9 +164,9 @@ class OnAudioEdit {
   Future<Map<dynamic, dynamic>> readSpecificsAudioTags(
       String data, List<TagType> tags) async {
     List<int> tagsIndex = [];
-    tags.forEach((it) {
+    for (var it in tags) {
       tagsIndex.add(it.index);
-    });
+    }
     final Map<dynamic, dynamic> readSpecificsAudioTags =
         await _channel.invokeMethod("readSpecificsAudioTags", {
       "data": data,
@@ -258,13 +263,13 @@ class OnAudioEdit {
   Future<bool> editAudios(
       List<String> data, List<Map<TagType, dynamic>> tags) async {
     List<Map<int, dynamic>> finalList = [];
-    tags.forEach((it1) {
+    for (var it1 in tags) {
       Map<int, dynamic> finalTags = {};
       it1.forEach((key, value) {
         finalTags[key.index] = value;
       });
       finalList.add(finalTags);
-    });
+    }
     final bool resultEditAudios = await _channel.invokeMethod("editAudios", {
       "data": data,
       "tags": finalList,

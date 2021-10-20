@@ -1,3 +1,24 @@
+## [1.1.0] - [10.20.2021]
+### Features
+#### Dart
+- **[Added]** `getMap` to `AudioModel`.
+- **[Added]** a [`DART ANALYZER`](https://github.com/axel-op/dart-package-analyzer/) to `PULL_REQUEST` and `PUSH`.
+
+### Documentation
+- Updated `README` documentation.
+- Updated dependences.
+- Updated `OnAudioEdit` and `OnAudioEditExample` documentation to support new `[Flutter 2.5]`.
+- Created `DEPRECATED` file/history.
+
+### Changes
+#### Dart
+- Changed from `[AudiosTagModel]` to `[AudioModel]`.
+- Removed `[IOS]` from `[pubspec]`.
+
+### ⚠ Important Changes
+#### Dart
+- Deprecated `[AudiosTagModel]` from `[AudioModel]`.
+
 ## [1.0.2] - [04.20.2021]
 ### Features
 #### Dart/Kotlin
@@ -72,6 +93,14 @@
 ### Changes
 - TODO
 
-### Important Changes
+### ⚠ Important Changes
+#### @**Deprecated**
 - TODO
  -->
+
+<!-- 
+ https://github.com/LucasPJS/on_audio_query/issues/
+ - **[Added]** (Text)- [#Issue](Link)
+ - **[Fixed]** (Text)- [#Issue](Link)
+ - **[Changed]** (Text)- [#Issue](Link)
+-->
