@@ -34,7 +34,7 @@ NOTE: Fique à vontade para ajudar nas traduções
 Adicione o seguinte codigo para seu `pubspec.yaml`:
 ```yaml
 dependencies:
-  on_audio_edit: ^1.0.2
+  on_audio_edit: ^1.1.0
 ```
 
 #### Solicitar Permissões:

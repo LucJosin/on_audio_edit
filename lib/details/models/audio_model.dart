@@ -1,9 +1,8 @@
 part of on_audio_edit;
 
-// Deprecated after [1.1.0]
-@Deprecated('Use [AudioModel] instead.')
-class AudiosTagModel {
-  AudiosTagModel(this._info);
+/// [AudioModel] contains all Song Tag/Information.
+class AudioModel {
+  AudioModel(this._info);
 
   /// The type dynamic is used for both but, the map is always based in [String, dynamic]
   final Map<dynamic, dynamic> _info;
@@ -109,4 +108,10 @@ class AudiosTagModel {
 
   /// Return song [year]
   String get year => _info["YEAR"];
+
+  /// Return a map with all [keys] and [values] from specific song.
+  Map get getMap => _info;
+
+  @override
+  String toString() => _info.toString();
 }
