@@ -5,6 +5,9 @@ part of on_audio_edit;
 /// All the songs tags type.
 enum TagType {
   ///
+  ALBUM,
+
+  ///
   ALBUM_ARTIST,
 
   ///

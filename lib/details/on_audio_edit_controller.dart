@@ -25,55 +25,40 @@ class OnAudioEdit {
   /// Parameters:
   ///
   /// * [data] is used for find specific audio data.
+  /// * [searchInsideFolders] is used for find specific audio data even inside
+  /// the folders. **(Only required when using Android 10 or above)**
   ///
   /// Usage:
   ///
   /// ```dart
-  ///   Map<dynamic, dynamic> song = await OnAudioEdit().readAudio(data);
-  ///   var songTitle = song["TITLE"];
-  ///   var songArtist = song["ARTIST"];
+  ///   AudioModel song = await OnAudioEdit().readAudio(data);
+  ///   String songTitle = song.title;
+  ///   String songArtist = song.artist;
   /// ```
   ///
   /// Important:
   ///
-  /// * Calling any method without [READ] and [WRITE] permission will throw a error.
+  /// * Calling any method without [READ] and [WRITE] permission will send a warning.
+  ///
   /// Use [permissionsStatus] to see permissions status.
-  /// * Most audios have no information other than the [title] and [artist].
-  /// * This method return a [Map<dynamic, dynamic>].
-  Future<Map<dynamic, dynamic>> readAudio(String data) async {
-    final Map<dynamic, dynamic> resultReadAudio =
-        await _channel.invokeMethod("readAudio", {
+  Future<AudioModel> readAudio(
+    String data, {
+    bool searchInsideFolders = false,
+  }) async {
+    final Map resultReadAudio = await _channel.invokeMethod("readAudio", {
       "data": data,
+      "searchInsideFolders": searchInsideFolders,
     });
-    return resultReadAudio;
+    return AudioModel(resultReadAudio);
   }
 
-  /// Used to return all possible info of a unique song.
-  ///
-  /// Parameters:
-  ///
-  /// * [data] is used for find specific audio data.
-  ///
-  /// Usage:
-  ///
-  /// ```dart
-  ///   Map<dynamic, dynamic> song = await OnAudioEdit().readAudio(data);
-  ///   var songTitle = song["TITLE"];
-  ///   var songArtist = song["ARTIST"];
-  /// ```
-  ///
-  /// Important:
-  ///
-  /// * Calling any method without [READ] and [WRITE] permission will throw a error.
-  /// Use [permissionsStatus] to see permissions status.
-  /// * Most audios have no information other than the [title] and [artist].
-  /// * This method return a [Map<dynamic, dynamic>].
-  Future<Map<dynamic, dynamic>> readAllAudio(String data) async {
-    final Map<dynamic, dynamic> resultReadAudio =
-        await _channel.invokeMethod("readAllAudio", {
-      "data": data,
-    });
-    return resultReadAudio;
+  /// Deprecated after [1.2.0]
+  @Deprecated('Use [readAudio] instead')
+  Future<AudioModel> readAllAudio(
+    String data, {
+    bool searchInsideFolders = false,
+  }) async {
+    return readAudio(data, searchInsideFolders: searchInsideFolders);
   }
 
   /// Used to return multiples songs info.
@@ -94,8 +79,8 @@ class OnAudioEdit {
   /// Important:
   ///
   /// * Calling any method without [READ] and [WRITE] permission will throw a error.
+  ///
   /// Use [permissionsStatus] to see permissions status.
-  /// * Most audios have no information other than the [title] and [artist].
   Future<List<AudioModel>> readAudios(List<String> data) async {
     final List<dynamic> resultReadAudio =
         await _channel.invokeMethod("readAudios", {
@@ -124,8 +109,8 @@ class OnAudioEdit {
   /// Important:
   ///
   /// * Calling any method without [READ] and [WRITE] permission will throw a error.
+  ///
   /// Use [permissionsStatus] to see permissions status.
-  /// * Most audios have no information other than the [title] and [artist].
   Future<String> readSingleAudioTag(String data, TagType tag) async {
     final String resultSingleAudioTag =
         await _channel.invokeMethod("readSingleAudioTag", {
@@ -161,7 +146,7 @@ class OnAudioEdit {
   /// Use [permissionsStatus] to see permissions status.
   /// * Most audios have no information other than the [title] and [artist].
   /// * This method return a [Map<dynamic, dynamic>].
-  Future<Map<dynamic, dynamic>> readSpecificsAudioTags(
+  Future<AudioModel> readSpecificsAudioTags(
       String data, List<TagType> tags) async {
     List<int> tagsIndex = [];
     for (var it in tags) {
@@ -172,7 +157,7 @@ class OnAudioEdit {
       "data": data,
       "tags": tagsIndex,
     });
-    return readSpecificsAudioTags;
+    return AudioModel(readSpecificsAudioTags);
   }
 
   /// Used to edit song info.

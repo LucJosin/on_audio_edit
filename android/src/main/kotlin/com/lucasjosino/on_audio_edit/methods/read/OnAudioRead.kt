@@ -1,6 +1,5 @@
 package com.lucasjosino.on_audio_edit.methods.read
 
-import android.util.Log
 import com.lucasjosino.on_audio_edit.types.checkTag
 import com.lucasjosino.on_audio_edit.utils.checkAndGetExtraInfo
 import com.lucasjosino.on_audio_edit.utils.getAllProjection
@@ -26,28 +25,10 @@ class OnAudioRead {
 
         // Getting all tags
         val tagsData: MutableMap<String, Any> = HashMap()
-        for (tag in getProjection()) tagsData[tag.name] = audioTag.getValue(tag, 0).orEmpty()
-        Log.i("CheckCoverArt", tagsData["COVER_ART"].toString())
+        for (tag in getAllProjection()) tagsData[tag.name] = audioTag.getValue(tag, 0).orEmpty()
 
         // Extra information
         tagsData.putAll(checkAndGetExtraInfo(audioFile))
-
-        // Sending to Dart
-        result.success(tagsData)
-    }
-
-    fun readAllAudio(result: MethodChannel.Result, call: MethodCall) {
-        // Get all information from Dart.
-        val data = call.argument<String>("data")!!
-
-        // Setup
-        val audioData = File(data)
-        val audioFile = AudioFileIO.read(audioData)
-        val audioTag = audioFile.tag
-
-        // Getting all tags
-        val tagsData: MutableMap<String, Any> = HashMap()
-        for (tag in getAllProjection()) tagsData[tag.name] = audioTag.getValue(tag, 0).orEmpty()
 
         // Sending to Dart
         result.success(tagsData)

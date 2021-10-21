@@ -68,7 +68,7 @@ class OnAudioEditPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
         this.result = result; this.call = call
 
         // Warn the developer that this application don't have the [READ] and [WRITE] permissions.
-        if (checkSimplePermissions()) {
+        if (!checkSimplePermissions()) {
             Log.w(
                 "on_audio_warning",
                 "This application don't have the [READ] and [WRITE] permissions."
@@ -100,7 +100,6 @@ class OnAudioEditPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
 
             // Read methods
             "readAudio" -> OnAudioRead().readAudio(result, call)
-            "readAllAudio" -> OnAudioRead().readAllAudio(result, call)
             "readAudios" -> OnAudioRead().readAudios(result, call)
             "readSingleAudioTag" -> OnAudioRead().readSingleAudioTag(result, call)
             "readSpecificsAudioTags" -> OnAudioRead().readSpecificsAudioTags(result, call)
