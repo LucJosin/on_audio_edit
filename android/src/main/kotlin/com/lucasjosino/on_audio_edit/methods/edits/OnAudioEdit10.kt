@@ -28,14 +28,17 @@ class OnAudioEdit10(private val context: Context, private val activity: Activity
     // Main parameters
     private val channelError = "on_audio_error"
     private val onSharedPrefKeyUriCode = "on_audio_edit_uri"
+    private var searchInsideFolders: Boolean = false
     private lateinit var data: String
     private lateinit var getTagsAndInfo: MutableMap<FieldKey, Any>
 
     // Edit File to Android >= 29/Q/10
 
     // Check if plugin already has uri.
-    private fun getUri() : String? = activity.getSharedPreferences("on_audio_edit",
-            Context.MODE_PRIVATE).getString(onSharedPrefKeyUriCode, "")
+    private fun getUri(): String? = activity.getSharedPreferences(
+        "on_audio_edit",
+        Context.MODE_PRIVATE
+    ).getString(onSharedPrefKeyUriCode, "")
 
     // Android 10 has a bug on Storage system, to edit some audio we need ask user permission on specific folder.
     // This extra permission has already been accepted (OnAudioEditPlugin.kt -> openTree()) at this moment and uri it's already saved.
@@ -46,12 +49,14 @@ class OnAudioEdit10(private val context: Context, private val activity: Activity
 
         // Get all information from Dart.
         this.data = call.argument<String>("data")!!
+        this.searchInsideFolders = call.argument<Boolean>("searchInsideFolders")!!
         val mapTagsAndInfo: MutableMap<Int, Any> = call.argument("tags")!!
 
         // Converting int to FieldKey
         this.getTagsAndInfo = EnumMap(FieldKey::class.java)
         mapTagsAndInfo.forEach { keyOrValue ->
-            if (checkTag(keyOrValue.key) != null) getTagsAndInfo[checkTag(keyOrValue.key)!!] = keyOrValue.value
+            if (checkTag(keyOrValue.key) != null) getTagsAndInfo[checkTag(keyOrValue.key)!!] =
+                keyOrValue.value
         }
 
         // Do everything in background to avoid bad performance.
@@ -65,7 +70,7 @@ class OnAudioEdit10(private val context: Context, private val activity: Activity
     }
 
     @Suppress("BlockingMethodInNonBlockingContext")
-    private suspend fun doEverythingInBackground() : Boolean = withContext(Dispatchers.IO) {
+    private suspend fun doEverythingInBackground(): Boolean = withContext(Dispatchers.IO) {
         val internalData = File(data)
 
         // Get and check if uri is null.
@@ -73,11 +78,10 @@ class OnAudioEdit10(private val context: Context, private val activity: Activity
 
         // Use DocumentFile to navigate and find specific data inside specific folder.
         // We need this, cuz google blocked some access in Android >= 10/Q
-        var pUri: Uri = Uri.parse("") // This can be null but, we use inside try / catch
-        val dFile = DocumentFile.fromTreeUri(context, uriFolder)
-        // [findFile] will give a slow performance, so, we use Kotlin Coroutines and "doEverythingInBackground"
-        val fileList = dFile!!.findFile(internalData.name)
-        if (fileList != null) pUri = fileList.uri
+        val pUri: Uri
+        val dFile = DocumentFile.fromTreeUri(context, uriFolder) ?: return@withContext false
+        // [getFile] will give a slow performance, so, we use Kotlin Coroutines and "doEverythingInBackground"
+        pUri = getFile(dFile, internalData)?.uri ?: return@withContext false
 
         // Temp file just to write(rewrite) file path. Produce the same result as "scan"
         val temp = File.createTempFile("tmp-media", '.' + Utils.getExtension(internalData))
@@ -97,7 +101,9 @@ class OnAudioEdit10(private val context: Context, private val activity: Activity
 
         try {
             AudioFileIO.write(audioFile)
-        } catch (e: Exception) { Log.i(channelError, e.toString()) }
+        } catch (e: Exception) {
+            Log.i(channelError, e.toString())
+        }
 
         // Start setup to write in folder
         // Until this moment we only write inside audio file, but we need tell android that this file has some change.
@@ -130,6 +136,20 @@ class OnAudioEdit10(private val context: Context, private val activity: Activity
         // Delete temp folder.
         temp.delete()
         return@withContext false
+    }
+
+    private fun getFile(directory: DocumentFile, specificFile: File): DocumentFile? {
+        val files = directory.listFiles()
+        for (file in files) {
+            val data: DocumentFile? = if (file.isDirectory) {
+                // If [searchInsideFolders] is true, we keep searching, if not, no file was found.
+                if (searchInsideFolders) getFile(file, specificFile) else return null
+            } else {
+                if (file.name == specificFile.name) file else null
+            }
+            if (data != null) return data
+        }
+        return null
     }
 
     // TODO Edit Multiples Audios on Android >= 29/Q/10

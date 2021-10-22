@@ -20,6 +20,23 @@ class OnAudioEdit {
   static const String channelId = "com.lucasjosino.on_audio_edit";
   static const MethodChannel _channel = MethodChannel(channelId);
 
+  /// Used to warn about tags that can't be modified.
+  void _cannotModifiy(TagType tag) {
+    switch (tag) {
+      case TagType.BITRATE:
+      case TagType.CHANNELS:
+      // case TagType.FIRST_ARTWORK:
+      case TagType.FORMAT:
+      case TagType.TRACK_LENGTH:
+      case TagType.SAMPLE_RATE:
+      case TagType.ENCODING_TYPE:
+        log('Cannot modifiy [$tag]. Ignoring request');
+        break;
+      default:
+        break;
+    }
+  }
+
   /// Used to return unique song info.
   ///
   /// Parameters:
@@ -29,51 +46,30 @@ class OnAudioEdit {
   /// Usage:
   ///
   /// ```dart
-  ///   Map<dynamic, dynamic> song = await OnAudioEdit().readAudio(data);
-  ///   var songTitle = song["TITLE"];
-  ///   var songArtist = song["ARTIST"];
+  ///   AudioModel song = await OnAudioEdit().readAudio(data);
+  ///   String songTitle = song.title;
+  ///   String songArtist = song.artist ?? <No Artist>;
   /// ```
   ///
   /// Important:
   ///
-  /// * Calling any method without [READ] and [WRITE] permission will throw a error.
+  /// * Calling any method without [READ] and [WRITE] permission will send a warning.
+  ///
   /// Use [permissionsStatus] to see permissions status.
-  /// * Most audios have no information other than the [title] and [artist].
-  /// * This method return a [Map<dynamic, dynamic>].
-  Future<Map<dynamic, dynamic>> readAudio(String data) async {
-    final Map<dynamic, dynamic> resultReadAudio =
-        await _channel.invokeMethod("readAudio", {
+  Future<AudioModel> readAudio(String data) async {
+    final Map resultReadAudio = await _channel.invokeMethod("readAudio", {
       "data": data,
     });
-    return resultReadAudio;
+    return AudioModel(resultReadAudio);
   }
 
-  /// Used to return all possible info of a unique song.
-  ///
-  /// Parameters:
-  ///
-  /// * [data] is used for find specific audio data.
-  ///
-  /// Usage:
-  ///
-  /// ```dart
-  ///   Map<dynamic, dynamic> song = await OnAudioEdit().readAudio(data);
-  ///   var songTitle = song["TITLE"];
-  ///   var songArtist = song["ARTIST"];
-  /// ```
-  ///
-  /// Important:
-  ///
-  /// * Calling any method without [READ] and [WRITE] permission will throw a error.
-  /// Use [permissionsStatus] to see permissions status.
-  /// * Most audios have no information other than the [title] and [artist].
-  /// * This method return a [Map<dynamic, dynamic>].
-  Future<Map<dynamic, dynamic>> readAllAudio(String data) async {
-    final Map<dynamic, dynamic> resultReadAudio =
-        await _channel.invokeMethod("readAllAudio", {
-      "data": data,
-    });
-    return resultReadAudio;
+  /// Deprecated after [1.2.0]
+  @Deprecated('Use [readAudio] instead')
+  Future<AudioModel> readAllAudio(
+    String data, {
+    bool searchInsideFolders = false,
+  }) async {
+    return readAudio(data);
   }
 
   /// Used to return multiples songs info.
@@ -85,17 +81,17 @@ class OnAudioEdit {
   /// Usage:
   ///
   /// ```dart
-  ///   List AudiosTagModel> song = await OnAudioEdit().readAudios(allData);
+  ///   List<AudioModel> song = await OnAudioEdit().readAudios(allData);
   ///   ...
-  ///   var songInfo = song[0].title;
-  ///   var songInfo2 = song[1].title;
+  ///   String songInfo = song[0].title;
+  ///   String songInfo2 = song[1].title;
   /// ```
   ///
   /// Important:
   ///
   /// * Calling any method without [READ] and [WRITE] permission will throw a error.
+  ///
   /// Use [permissionsStatus] to see permissions status.
-  /// * Most audios have no information other than the [title] and [artist].
   Future<List<AudioModel>> readAudios(List<String> data) async {
     final List<dynamic> resultReadAudio =
         await _channel.invokeMethod("readAudios", {
@@ -118,14 +114,14 @@ class OnAudioEdit {
   ///   print(title); // Ex: Heavy, California
   ///   ...
   ///   String artist = await OnAudioEdit().readSingleAudioTag(data, TagsType.ARTIST);
-  ///   print(artist); // Ex: Jungle
+  ///   print(artist ?? <No Artist>); // Ex: Jungle
   /// ```
   ///
   /// Important:
   ///
   /// * Calling any method without [READ] and [WRITE] permission will throw a error.
+  ///
   /// Use [permissionsStatus] to see permissions status.
-  /// * Most audios have no information other than the [title] and [artist].
   Future<String> readSingleAudioTag(String data, TagType tag) async {
     final String resultSingleAudioTag =
         await _channel.invokeMethod("readSingleAudioTag", {
@@ -147,21 +143,20 @@ class OnAudioEdit {
   /// ```dart
   ///   List<TagsType> tags = [
   ///     TagsType.TITLE,
-  ///     TagsType.ARTIST
+  ///     TagsType.ARTIST,
   ///   ];
-  ///   var songSpecifics = await OnAudioEdit().readSpecificsAudioTags(data, tags);
+  ///   AudioModel songSpecifics = await OnAudioEdit().readSpecificsAudioTags(data, tags);
   ///   ...
-  ///   var songTitle = songSpecifics["TITLE"];
-  ///   var songArtist = songSpecifics["ARTIST"];
+  ///   String songTitle = songSpecifics.title;
+  ///   String songArtist = songSpecifics.artist ?? <No Artist>;
   /// ```
   ///
   /// Important:
   ///
   /// * Calling any method without [READ] and [WRITE] permission will throw a error.
+  ///
   /// Use [permissionsStatus] to see permissions status.
-  /// * Most audios have no information other than the [title] and [artist].
-  /// * This method return a [Map<dynamic, dynamic>].
-  Future<Map<dynamic, dynamic>> readSpecificsAudioTags(
+  Future<AudioModel> readSpecificsAudioTags(
       String data, List<TagType> tags) async {
     List<int> tagsIndex = [];
     for (var it in tags) {
@@ -172,7 +167,7 @@ class OnAudioEdit {
       "data": data,
       "tags": tagsIndex,
     });
-    return readSpecificsAudioTags;
+    return AudioModel(readSpecificsAudioTags);
   }
 
   /// Used to edit song info.
@@ -181,6 +176,8 @@ class OnAudioEdit {
   ///
   /// * [data] is used for find specific audio data.
   /// * [tags] is used to define what tags and values you want edit.
+  /// * [searchInsideFolders] is used for find specific audio data even inside
+  /// the folders. **(Only required when using Android 10 or above)**
   ///
   /// Usage:
   ///
@@ -199,22 +196,29 @@ class OnAudioEdit {
   /// Use [permissionsStatus] to see permissions status.
   /// * This method return true if audio has edited or false if don't.
   ///
-  /// Super Important:
+  /// **Warning:**
   /// * This method works normal in Android below 10,
   /// from Android 10 or above user will need to accept access in Folder.
   /// You can see this "Complex Permission" status using [complexPermissionStatus].
-  /// By default when calling this method will open a new screen to user choose a folder,
+  ///
+  /// * By default when calling this method will open a new screen to user choose a folder,
   /// but you can anticipate the request using [requestComplexPermission].
   /// The request status and folder permission will be saved as persistent but
   /// if user uninstall the app, this permission will be removed.
-  Future<bool> editAudio(String data, Map<TagType, dynamic> tags) async {
+  Future<bool> editAudio(
+    String data,
+    Map<TagType, dynamic> tags, {
+    bool searchInsideFolders = false,
+  }) async {
     Map<int, dynamic> finalTags = {};
     tags.forEach((key, value) {
+      _cannotModifiy(key);
       finalTags[key.index] = value;
     });
     final bool resultEditAudio = await _channel.invokeMethod("editAudio", {
       "data": data,
       "tags": finalTags,
+      "searchInsideFolders": searchInsideFolders,
     });
     return resultEditAudio;
   }
@@ -261,11 +265,14 @@ class OnAudioEdit {
   /// The request status and folder permission will be saved as persistent but
   /// if user uninstall the app, this permission will be removed.
   Future<bool> editAudios(
-      List<String> data, List<Map<TagType, dynamic>> tags) async {
+    List<String> data,
+    List<Map<TagType, dynamic>> tags,
+  ) async {
     List<Map<int, dynamic>> finalList = [];
     for (var it1 in tags) {
       Map<int, dynamic> finalTags = {};
       it1.forEach((key, value) {
+        _cannotModifiy(key);
         finalTags[key.index] = value;
       });
       finalList.add(finalTags);
@@ -293,7 +300,7 @@ class OnAudioEdit {
   /// * [data] is used to find multiples audios data.
   /// * [openFilePicker] is used to define if folder picker will be open to user choose image.
   /// * [imagePath] is used to define image path, only necessary if [openFilePicker] is false.
-  /// * [format] is used to define image type: [JPG], [JPEG] or [JPEG].
+  /// * [format] is used to define image type: [PNG] or [JPEG].
   /// * [size] is used to define image quality.
   /// * [description] is used to define artwork description.
   ///
@@ -306,12 +313,14 @@ class OnAudioEdit {
   /// * If [format] is null, will be set to [JPEG].
   /// * If [size] is null, will be set to [24].
   /// * If [description] is null, will be set to ["artwork"].
-  Future<bool> editArtwork(String data,
-      [bool? openFilePicker,
-      String? imagePath,
-      ArtworkFormat? format,
-      int? size,
-      String? description]) async {
+  Future<bool> editArtwork(
+    String data, [
+    bool? openFilePicker,
+    String? imagePath,
+    ArtworkFormat? format,
+    int? size,
+    String? description,
+  ]) async {
     assert(
         openFilePicker == false || imagePath == null,
         "Cannot change artwork image without image.\n"
@@ -356,8 +365,10 @@ class OnAudioEdit {
   /// * This method only works on Android 9 or below (later i will add support android 10).
   /// * If return true delete works, else delete found a problem.
   Future<bool> deleteArtworks(List<String> data) async {
-    final bool resultDeleteArts =
-        await _channel.invokeMethod("deleteArtworks", {"data": data});
+    final bool resultDeleteArts = await _channel.invokeMethod(
+      "deleteArtworks",
+      {"data": data},
+    );
     return resultDeleteArts;
   }
 
@@ -373,8 +384,10 @@ class OnAudioEdit {
   /// * This method only works on Android 9 or below (later i will add support android 10).
   /// * If return true delete works, else delete found a problem.
   Future<bool> deleteAudio(String data) async {
-    final bool resultDelete =
-        await _channel.invokeMethod("deleteAudio", {"data": data});
+    final bool resultDelete = await _channel.invokeMethod(
+      "deleteAudio",
+      {"data": data},
+    );
     return resultDelete;
   }
 
@@ -397,8 +410,9 @@ class OnAudioEdit {
   /// * This method only works on Android 10 or above.
   /// * If return true Complex Permission is Granted, else Complex Permission is Denied.
   Future<bool> complexPermissionStatus() async {
-    final bool resultStatusComplex =
-        await _channel.invokeMethod("complexPermissionStatus");
+    final bool resultStatusComplex = await _channel.invokeMethod(
+      "complexPermissionStatus",
+    );
     return resultStatusComplex;
   }
 
@@ -410,8 +424,9 @@ class OnAudioEdit {
   /// * This method only works on Android 10 or above.
   /// * If return true, Complex Permission was called, else Complex Permission was't called.
   Future<bool> requestComplexPermission() async {
-    final bool resultRequestComplex =
-        await _channel.invokeMethod("requestComplexPermission");
+    final bool resultRequestComplex = await _channel.invokeMethod(
+      "requestComplexPermission",
+    );
     return resultRequestComplex;
   }
 
@@ -423,15 +438,25 @@ class OnAudioEdit {
   /// * This method only works on Android 10 or above.
   /// * If return true, Complex Permission was reset, else Complex Permission was't reset.
   Future<bool> resetComplexPermission() async {
-    final bool resultReset =
-        await _channel.invokeMethod("resetComplexPermission");
+    final bool resultReset = await _channel.invokeMethod(
+      "resetComplexPermission",
+    );
     return resultReset;
   }
 
-  /// Used to open image folder to user select image and return this image path.
-  Future<String> getImagePath() async {
-    final String resultImagePath = await _channel.invokeMethod("getImagePath");
-    return resultImagePath;
+  /// Deprecated after [1.2.0].
+  @Deprecated('Use [getImage] instead.')
+  Future<ImageModel> getImagePath({ArtworkFormat? format, int? quality}) async {
+    return getImage(format: format, quality: quality);
+  }
+
+  /// Used to open image folder to user select image and return this [ImageModel].
+  Future<ImageModel> getImage({ArtworkFormat? format, int? quality}) async {
+    final Map resultImage = await _channel.invokeMethod("getImagePath", {
+      "format": format ?? ArtworkFormat.JPEG.index,
+      "quality": quality ?? 100,
+    });
+    return ImageModel(resultImage);
   }
 
   /// Used to return a converted value from file length.

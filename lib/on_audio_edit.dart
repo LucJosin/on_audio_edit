@@ -16,6 +16,8 @@ library on_audio_edit;
 
 //Dart/Flutter
 import 'dart:async';
+import 'dart:developer';
+import 'dart:typed_data';
 import 'package:flutter/services.dart';
 
 // Controller
@@ -28,3 +30,4 @@ part 'details/types/artwork_type.dart';
 // Models
 part 'details/models/audios_model.dart';
 part 'details/models/audio_model.dart';
+part 'details/models/image_model.dart';

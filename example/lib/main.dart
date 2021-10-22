@@ -102,11 +102,11 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                         onTap: () => optionsDialog(context, index),
                         // [onLongPress] will read all information about selected items:
                         onLongPress: () async {
-                          var result = await _audioEdit.readAudios(
-                            [songList[index].data],
+                          var result = await _audioEdit.readAudio(
+                            songList[index].data,
                           );
                           // Print the result.
-                          debugPrint(result[0].toString());
+                          debugPrint('$result');
                         },
                         title: Text(songList[index].title),
                         subtitle: Text(
