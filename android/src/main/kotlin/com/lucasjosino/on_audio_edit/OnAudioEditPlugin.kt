@@ -1,10 +1,15 @@
 /*
+=============
 Author: Lucas Josino
 Github: https://github.com/LucasPJS
-Plugin: on_audio_edit
+Website: https://lucasjosino.com/
+=============
+Plugin/Id: on_audio_edit#3
 Homepage: https://github.com/LucasPJS/on_audio_edit
-Copyright: © 2021, Lucas Josino. All rights reserved.
+Pub: https://pub.dev/packages/on_audio_edit
 License: https://github.com/LucasPJS/on_audio_edit/blob/main/LICENSE
+Copyright: © 2021, Lucas Josino. All rights reserved.
+=============
 */
 
 package com.lucasjosino.on_audio_edit
@@ -33,6 +38,12 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry
+
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import com.lucasjosino.on_audio_edit.utils.checkArtworkFormatBitmap
+import java.io.ByteArrayOutputStream
+import java.io.FileOutputStream
 
 /** OnAudioEditPlugin */
 class OnAudioEditPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
@@ -341,7 +352,12 @@ class OnAudioEditPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
             }
             onImagePickerExternalCode -> {
                 if (resultCode == RESULT_OK && resultData != null) {
-                    result.success(resultData.data.toString())
+                    val imageData: MutableMap<String, Any?> = HashMap()
+                    val file = FileOutputStream(resultData.dataString)
+                    val bitmap = BitmapFactory.decodeFileDescriptor(file.fd)
+                    imageData["imageBytes"] = convertBitmap(bitmap)
+                    imageData["imageData"] = resultData.dataString
+                    result.success(imageData)
                 } else {
                     result.error(
                         channelError,
@@ -356,5 +372,22 @@ class OnAudioEditPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
             }
         }
         return true
+    }
+
+    //
+    private fun convertBitmap(bitmap: Bitmap): ByteArray? {
+        val convertedBytes: ByteArray?
+        val byteArrayBase = ByteArrayOutputStream()
+        val format = checkArtworkFormatBitmap(call.argument<Int>("format")!!)
+        var quality = call.argument<Int>("quality")!!
+        if (quality > 100) quality = 100
+        try {
+            bitmap.compress(format, quality, byteArrayBase)
+        } catch (e: Exception) {
+            Log.i("on_audio_error", "$e")
+        }
+        convertedBytes = byteArrayBase.toByteArray()
+        byteArrayBase.close()
+        return convertedBytes
     }
 }

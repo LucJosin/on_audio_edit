@@ -2,188 +2,89 @@ package com.lucasjosino.on_audio_edit.utils
 
 import org.jaudiotagger.tag.FieldKey
 
-fun getProjection() : Array<FieldKey> = projection
 fun getAllProjection() : Array<FieldKey> = allProjection
 
-private var projection = arrayOf(
-        FieldKey.ALBUM_ARTIST,
-        FieldKey.ARTIST,
-        FieldKey.ARTISTS,
-        FieldKey.BPM,
-//            FieldKey.BITRATE, 4
-//            FieldKey.CHANNELS, 5
-        FieldKey.COMPOSER,
-        FieldKey.COUNTRY,
-        FieldKey.COVER_ART,
-//            FieldKey.FIRST_ARTWORK, 9
-//            FieldKey.FORMAT, 10
-        FieldKey.GENRE,
-        FieldKey.ISRC,
-        FieldKey.KEY,
-        FieldKey.LANGUAGE,
-//            FieldKey.LENGTH, 15
-        FieldKey.LYRICS,
-        FieldKey.ORIGINAL_ALBUM,
-        FieldKey.ORIGINAL_ARTIST,
-        FieldKey.ORIGINAL_LYRICIST,
-        FieldKey.ORIGINAL_YEAR,
-        FieldKey.PRODUCER,
-        FieldKey.QUALITY,
-        FieldKey.RATING,
-        FieldKey.RECORD_LABEL,
-//            FieldKey.SAMPLE_RATE, 25
-        FieldKey.SUBTITLE,
-        FieldKey.TAGS,
-        FieldKey.TEMPO,
-        FieldKey.TITLE,
-        FieldKey.TRACK,
-//            FieldKey.TYPE, 31
-        FieldKey.YEAR
-)
 private var allProjection = arrayOf(
-        FieldKey.ACOUSTID_FINGERPRINT,
-        FieldKey.ACOUSTID_ID,
-        FieldKey.ALBUM,
-        FieldKey.ALBUM_ARTIST,
-        FieldKey.ALBUM_ARTIST_SORT,
-        FieldKey.ALBUM_SORT,
-        FieldKey.AMAZON_ID,
-        FieldKey.ARRANGER,
-        FieldKey.ARTIST,
-        FieldKey.ARTIST_SORT,
-        FieldKey.ARTISTS,
-        FieldKey.BARCODE,
-        FieldKey.BPM,
-        FieldKey.CATALOG_NO,
-        FieldKey.COMMENT,
-        FieldKey.COMPOSER,
-        FieldKey.COMPOSER_SORT,
-        FieldKey.CONDUCTOR,
-        FieldKey.COUNTRY,
-        FieldKey.COVER_ART,
-        FieldKey.CUSTOM1,
-        FieldKey.CUSTOM2,
-        FieldKey.CUSTOM3,
-        FieldKey.CUSTOM4,
-        FieldKey.CUSTOM5,
-        FieldKey.DISC_NO,
-        FieldKey.DISC_SUBTITLE,
-        FieldKey.DISC_TOTAL,
-        FieldKey.DJMIXER,
-        FieldKey.ENCODER,
-        FieldKey.ENGINEER,
-        FieldKey.FBPM,
-        FieldKey.GENRE,
-        FieldKey.GROUPING,
-        FieldKey.ISRC,
-        FieldKey.IS_COMPILATION,
-        FieldKey.KEY,
-        FieldKey.LANGUAGE,
-        FieldKey.LYRICIST,
-        FieldKey. LYRICS,
-        FieldKey.MEDIA,
-        FieldKey.MIXER,
-        FieldKey.MOOD,
-        FieldKey.MUSICBRAINZ_ARTISTID,
-        FieldKey.MUSICBRAINZ_DISC_ID,
-        FieldKey.MUSICBRAINZ_ORIGINAL_RELEASE_ID,
-        FieldKey.MUSICBRAINZ_RELEASEARTISTID,
-        FieldKey.MUSICBRAINZ_RELEASEID,
-        FieldKey.MUSICBRAINZ_RELEASE_COUNTRY,
-        FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID,
-        FieldKey.MUSICBRAINZ_RELEASE_STATUS,
-        FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID,
-        FieldKey.MUSICBRAINZ_RELEASE_TYPE,
-        FieldKey.MUSICBRAINZ_TRACK_ID,
-        FieldKey.MUSICBRAINZ_WORK_ID,
-        FieldKey.MUSICIP_ID,
-        FieldKey.OCCASION,
-        FieldKey.ORIGINAL_ALBUM,
-        FieldKey.ORIGINAL_ARTIST,
-        FieldKey.ORIGINAL_LYRICIST,
-        FieldKey.ORIGINAL_YEAR,
-        FieldKey.QUALITY,
-        FieldKey.PRODUCER,
-        FieldKey.RATING,
-        FieldKey.RECORD_LABEL,
-        FieldKey.REMIXER,
-        FieldKey.SCRIPT,
-        FieldKey.SUBTITLE,
-        FieldKey.TAGS,
-        FieldKey.TEMPO,
-        FieldKey.TITLE,
-        FieldKey.TITLE_SORT,
-        FieldKey.TRACK,
-        FieldKey.TRACK_TOTAL,
-        FieldKey.URL_DISCOGS_ARTIST_SITE,
-        FieldKey.URL_DISCOGS_RELEASE_SITE,
-        FieldKey.URL_LYRICS_SITE,
-        FieldKey.URL_OFFICIAL_ARTIST_SITE,
-        FieldKey.URL_OFFICIAL_RELEASE_SITE,
-        FieldKey.URL_WIKIPEDIA_ARTIST_SITE,
-        FieldKey.URL_WIKIPEDIA_RELEASE_SITE,
-        FieldKey.YEAR
+        FieldKey.ACOUSTID_FINGERPRINT, // 0
+        FieldKey.ACOUSTID_ID, // 1
+        FieldKey.ALBUM, // 2
+        FieldKey.ALBUM_ARTIST, // 3
+        FieldKey.ALBUM_ARTIST_SORT, // 4
+        FieldKey.ALBUM_SORT, // 5
+        FieldKey.AMAZON_ID, // 6
+        FieldKey.ARRANGER, // 7
+        FieldKey.ARTIST, // 8
+        FieldKey.ARTIST_SORT, // 9
+        FieldKey.ARTISTS, // 10
+        FieldKey.BARCODE, // 11
+        FieldKey.BPM, // 12
+        FieldKey.CATALOG_NO, // 13
+        FieldKey.COMMENT, // 14
+        FieldKey.COMPOSER, // 15
+        FieldKey.COMPOSER_SORT, // 16
+        FieldKey.CONDUCTOR, // 17
+        FieldKey.COUNTRY, // 18
+        FieldKey.COVER_ART, // 19
+        FieldKey.CUSTOM1, // 20
+        FieldKey.CUSTOM2, // 21
+        FieldKey.CUSTOM3, // 22
+        FieldKey.CUSTOM4, // 23
+        FieldKey.CUSTOM5, // 24
+        FieldKey.DISC_NO, // 25
+        FieldKey.DISC_SUBTITLE, // 26
+        FieldKey.DISC_TOTAL, // 27
+        FieldKey.DJMIXER, // 28
+        FieldKey.ENCODER, // 29
+        FieldKey.ENGINEER, // 30
+        FieldKey.FBPM, // 31
+        FieldKey.GENRE, // 32
+        FieldKey.GROUPING, // 33
+        FieldKey.ISRC, // 34
+        FieldKey.IS_COMPILATION, // 35
+        FieldKey.KEY, // 36
+        FieldKey.LANGUAGE, // 37
+        FieldKey.LYRICIST, // 38
+        FieldKey.LYRICS, // 39
+        FieldKey.MEDIA, // 40
+        FieldKey.MIXER, // 41
+        FieldKey.MOOD, // 42
+        FieldKey.MUSICBRAINZ_ARTISTID, // 43
+        FieldKey.MUSICBRAINZ_DISC_ID, // 44
+        FieldKey.MUSICBRAINZ_ORIGINAL_RELEASE_ID, // 45
+        FieldKey.MUSICBRAINZ_RELEASEARTISTID, // 46
+        FieldKey.MUSICBRAINZ_RELEASEID, // 47
+        FieldKey.MUSICBRAINZ_RELEASE_COUNTRY, // 48
+        FieldKey.MUSICBRAINZ_RELEASE_GROUP_ID, // 49
+        FieldKey.MUSICBRAINZ_RELEASE_STATUS, // 50
+        FieldKey.MUSICBRAINZ_RELEASE_TRACK_ID, // 51
+        FieldKey.MUSICBRAINZ_RELEASE_TYPE, // 52
+        FieldKey.MUSICBRAINZ_TRACK_ID, // 53
+        FieldKey.MUSICBRAINZ_WORK_ID, // 54
+        FieldKey.MUSICIP_ID, // 55
+        FieldKey.OCCASION, // 56
+        FieldKey.ORIGINAL_ALBUM, // 57
+        FieldKey.ORIGINAL_ARTIST, // 58
+        FieldKey.ORIGINAL_LYRICIST, // 59
+        FieldKey.ORIGINAL_YEAR, // 60
+        FieldKey.QUALITY, // 61
+        FieldKey.PRODUCER, // 62
+        FieldKey.RATING, // 63
+        FieldKey.RECORD_LABEL, // 64
+        FieldKey.REMIXER, // 65
+        FieldKey.SCRIPT, // 66
+        FieldKey.SUBTITLE, // 67
+        FieldKey.TAGS, // 68
+        FieldKey.TEMPO, // 69
+        FieldKey.TITLE, // 70
+        FieldKey.TITLE_SORT, // 71
+        FieldKey.TRACK, // 72
+        FieldKey.TRACK_TOTAL, // 73
+        FieldKey.URL_DISCOGS_ARTIST_SITE, // 74
+        FieldKey.URL_DISCOGS_RELEASE_SITE, // 75
+        FieldKey.URL_LYRICS_SITE, // 76
+        FieldKey.URL_OFFICIAL_ARTIST_SITE, // 77
+        FieldKey.URL_OFFICIAL_RELEASE_SITE, // 78
+        FieldKey.URL_WIKIPEDIA_ARTIST_SITE, // 79
+        FieldKey.URL_WIKIPEDIA_RELEASE_SITE, // c
+        FieldKey.YEAR // 81
 )
-
-// Extras:
-
-// All Tags
-// {
-//   ACOUSTID_FINGERPRINT,
-//   ACOUSTID_ID,
-//   ALBUM,
-//   ALBUM_ARTIST_SORT,
-//   ALBUM_SORT,
-//   AMAZON_ID,
-//   ARRANGER,
-//   ARTIST_SORT,
-//   BARCODE,
-//   CATALOG_NO,
-//   COMMENT,
-//   COMPOSER_SORT,
-//   CONDUCTOR,
-//   COVER_ART,
-//   CUSTOM1,
-//   CUSTOM2,
-//   CUSTOM3,
-//   CUSTOM4,
-//   CUSTOM5,
-//   DISC_NO,
-//   DISC_SUBTITLE,
-//   DISC_TOTAL,
-//   DJMIXER,
-//   ENCODER,
-//   ENGINEER,
-//   FBPM,
-//   GROUPING,
-//   IS_COMPILATION,
-//   LYRICIST,
-//   MEDIA,
-//   MIXER,
-//   MOOD,
-//   MUSICBRAINZ_ARTISTID,
-//   MUSICBRAINZ_DISC_ID,
-//   MUSICBRAINZ_ORIGINAL_RELEASE_ID,
-//   MUSICBRAINZ_RELEASEARTISTID,
-//   MUSICBRAINZ_RELEASEID,
-//   MUSICBRAINZ_RELEASE_COUNTRY,
-//   MUSICBRAINZ_RELEASE_GROUP_ID,
-//   MUSICBRAINZ_RELEASE_STATUS,
-//   MUSICBRAINZ_RELEASE_TRACK_ID,
-//   MUSICBRAINZ_RELEASE_TYPE,
-//   MUSICBRAINZ_TRACK_ID,
-//   MUSICBRAINZ_WORK_ID,
-//   MUSICIP_ID,
-//   OCCASION,
-//   REMIXER,
-//   SCRIPT,
-//   TITLE_SORT,
-//   TRACK_TOTAL,
-//   URL_DISCOGS_ARTIST_SITE,
-//   URL_DISCOGS_RELEASE_SITE,
-//   URL_LYRICS_SITE,
-//   URL_OFFICIAL_ARTIST_SITE,
-//   URL_OFFICIAL_RELEASE_SITE,
-//   URL_WIKIPEDIA_ARTIST_SITE,
-//   URL_WIKIPEDIA_RELEASE_SITE,
-// }

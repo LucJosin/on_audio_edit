@@ -1,10 +1,10 @@
 package com.lucasjosino.on_audio_edit.methods.read
 
+import com.lucasjosino.on_audio_edit.extensions.tryInt
 import com.lucasjosino.on_audio_edit.types.checkTag
 import com.lucasjosino.on_audio_edit.utils.checkAndGetExtraInfo
 import com.lucasjosino.on_audio_edit.utils.getAllProjection
 import com.lucasjosino.on_audio_edit.utils.getExtraInfo
-import com.lucasjosino.on_audio_edit.utils.getProjection
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import org.jaudiotagger.audio.AudioFileIO
@@ -24,8 +24,13 @@ class OnAudioRead {
         val audioTag = audioFile.tag
 
         // Getting all tags
-        val tagsData: MutableMap<String, Any> = HashMap()
-        for (tag in getAllProjection()) tagsData[tag.name] = audioTag.getValue(tag, 0).orEmpty()
+        val tagsData: MutableMap<String, Any?> = HashMap()
+        for (tag in getAllProjection()) {
+            val value = audioTag.getValue(tag, 0)
+            if (!value.isNullOrEmpty()) {
+                tagsData[tag.name] = value.tryInt(tag.ordinal)
+            }
+        }
 
         // Extra information
         tagsData.putAll(checkAndGetExtraInfo(audioFile))
@@ -40,7 +45,7 @@ class OnAudioRead {
         val data: ArrayList<String> = call.argument("data")!!
 
         // Getting all path
-        val tagsList: ArrayList<MutableMap<String, Any>> = ArrayList()
+        val tagsList: ArrayList<MutableMap<String, Any?>> = ArrayList()
 
         // Looping until get the last path
         for (pathData in data) {
@@ -50,8 +55,13 @@ class OnAudioRead {
             val audioTag = audioFile.tag
 
             // Getting all tags
-            val tagsData: MutableMap<String, Any> = HashMap()
-            for (tag in getProjection()) tagsData[tag.name] = audioTag.getValue(tag, 0).orEmpty()
+            val tagsData: MutableMap<String, Any?> = HashMap()
+            for (tag in getAllProjection()) {
+                val value = audioTag.getValue(tag, 0)
+                if (!value.isNullOrEmpty()) {
+                    tagsData[tag.name] = value.tryInt(tag.ordinal)
+                }
+            }
 
             // Extra information
             tagsData.putAll(checkAndGetExtraInfo(audioFile))
@@ -75,14 +85,19 @@ class OnAudioRead {
 
         // Getting specific tag
         val resultTag = when (tag) {
-            4 -> audioFile.audioHeader.bitRate
-            5 -> audioFile.audioHeader.channels
-            9 -> audioTag.firstArtwork.binaryData.toString()
-            10 -> audioFile.audioHeader.format
-            15 -> audioFile.audioHeader.trackLength.toString()
-            25 -> audioFile.audioHeader.sampleRate
-            31 -> audioFile.audioHeader.encodingType
-            else -> audioTag.getValue(checkTag(tag), 0).orEmpty()
+            82 -> audioFile.audioHeader.bitRate.toInt()
+            83 -> audioFile.audioHeader.channels
+            84 -> audioTag.firstArtwork.binaryData
+            85 -> audioFile.audioHeader.format
+            86 -> audioFile.audioHeader.trackLength
+            87 -> audioFile.audioHeader.sampleRate.toInt()
+            88 -> audioFile.audioHeader.encodingType
+            else -> {
+                val value = audioTag.getValue(checkTag(tag), 0)
+                if (!value.isNullOrEmpty()) {
+                    value.tryInt(tag)
+                } else null
+            }
         }
 
         // Sending to Dart

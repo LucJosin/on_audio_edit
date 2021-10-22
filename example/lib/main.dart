@@ -12,8 +12,6 @@ Copyright: © 2021, Lucas Josino. All rights reserved.
 =============
 */
 
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:on_audio_edit/on_audio_edit.dart';
 import 'package:on_audio_query/on_audio_query.dart';
@@ -104,11 +102,11 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                         onTap: () => optionsDialog(context, index),
                         // [onLongPress] will read all information about selected items:
                         onLongPress: () async {
-                          var result = await _audioEdit.readAllAudio(
+                          var result = await _audioEdit.readAudio(
                             songList[index].data,
                           );
                           // Print the result.
-                          log(result.toString());
+                          debugPrint('$result');
                         },
                         title: Text(songList[index].title),
                         subtitle: Text(
