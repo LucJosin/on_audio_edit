@@ -34,7 +34,7 @@ NOTE: Feel free to help with readme translations
 Add the following code to your `pubspec.yaml`:
 ```yaml
 dependencies:
-  on_audio_edit: ^1.1.0
+  on_audio_edit: ^1.2.0
 ```
 
 #### Request Permission:
@@ -80,20 +80,36 @@ OnAudioEdit() // The main method to start using the plugin.
 ```
 All types of methods on this plugin:
 
+### Read methods
+
 |  Methods  |   Parameters   |   Return   |
 |--------------|-----------------|-----------------|
-| [`readAudio`](#readaudio) | `(String)` | `Map<dynamic, dynamic>` | <br>
-| [`readAllAudio`](#readallaudio) | `(String)` | `Map<TagsType, dynamic>` | <br>
-| [`readAudios`](#readaudios) | `(List<String>)` | `List<AudiosTagModel>` | <br>
+| [`readAudio`](#readaudio) | `(String)` | `AudioModel` | <br>
+| [`readAudios`](#readaudios) | `(List<String>)` | `List<AudioModel>` | <br>
 | [`readSingleAudioTag`](#readsingleaudiotag) | `(String, TagsType)` | `String` | <br>
-| [`readSpecificsAudioTags`](#readspecificsaudiotags) | `(String, List<TagsType>)` | `Map<dynamic, dynamic>` | <br>
+| [`readSpecificsAudioTags`](#readspecificsaudiotags) | `(String, List<TagsType>)` | `AudioModel` | <br>
+
+### Edit methods
+
+|  Methods  |   Parameters   |   Return   |
+|--------------|-----------------|-----------------|
 | [`editAudio`](#editaudio) | `(String, Map<TagsType, dynamic>)` | `bool` | <br>
 | [`editAudios`](#editaudios) | `(List<String>, List<Map<TagsType, dynamic>>)` | `bool` | <br>
 | [`editArtwork`](#editartwork) | `(String, bool, String, ArtworkFormat, int, String)` | `bool` | <br>
+
+### Delete methods
+
+|  Methods  |   Parameters   |   Return   |
+|--------------|-----------------|-----------------|
 | [`deleteArtwork`]() | **[W]**`(String)` | `bool` | <br>
 | [`deleteArtworks`]() | **[W]**`(List<String>)` | `bool` | <br>
 | [`deleteAudio`]() | **[W]**`(String)` | `bool` | <br>
-| [`getImagePath`]() |  | `String` | <br>
+
+### Permission/Image methods
+
+|  Methods  |   Parameters   |   Return   |
+|--------------|-----------------|-----------------|
+| [`getImage`]() | `ArtworkFormat, Quality` | `ImageModel` | <br>
 | [`permissionsStatus`]() |  | `bool` | <br>
 | [`resetComplexPermission`]() | **[Q]** | `bool` | <br>
 | [`requestComplexPermission`]() | **[Q]** | `bool` | <br>
@@ -111,47 +127,40 @@ All types of methods on this plugin:
 | `ARTISTS` | `ORIGINAL_YEAR` | `LANGUAGE` | `TEMPO` | `CHANNELS` | <br>
 | `BEATS_PER_MINUTE` | `PRODUCER` | `KEY` | `TAGS` | `COVER_ART` | <br>
 | `COMPOSER` | `QUALITY` | `ISRC` | `SUBTITLE` | `TYPE` | <br>
-| `COUNTRY` | `RATING` | `FIRST_ARTWORK` | `LENGTH` |
+| `COUNTRY` | `RATING` | `FIRST_ARTWORK` | `LENGTH` | [`More`](https://github.com/LucasPJS/on_audio_edit/blob/main/lib/details/types/tag_type.dart) | <br>
 | `GENRE` | `RECORD_LABEL` | `YEAR` | `BITRATE` | <br>
 
-**Using [readAllAudio](#readallaudio) you can get more infos about audio. See all list in: [AllTags](https://github.com/LucasPJS/on_audio_edit/blob/main/lib/details/types/tag_type.dart)**
-
 ## Examples:
+
+#### OnAudioEdit
+```dart
+  final OnAudioEdit _audioEdit = OnAudioEdit();
+```
 
 #### readAudio
 ```dart
   // data: "/storage/1E65-6GH3/SomeMusic.mp3" or "/storage/someFolder/SomeMusic.mp3"
-  Map<dynamic, dynamic> song = await OnAudioEdit().readAudio(data);
-  var songTitle = song["TITLE"];
-  var songArtist = song["ARTIST"];
-```
-
-#### readAllAudio
-This method read all possible info from a audio. See all list in: [AllTags](https://github.com/LucasPJS/on_audio_edit/blob/main/lib/details/types/tag_type.dart)
-```dart
-  Map<dynamic, dynamic> song = await OnAudioEdit().readAllAudio(data);
-  var songInfo1 = song["MIXER"];
-  var songInfo2 = song["MUSICBRAINZ_ORIGINAL_RELEASE_ID"];
-  var songInfo3 = song["AMAZON_ID"];
-  var songInfo4 = song["CONDUCTOR"];
+  AudioModel song = await _audioEdit.readAudio(data);
+  String songTitle = song.title;
+  String songArtist = song.artist ?? '<No Artist>';
 ```
 
 #### readAudios
 ```dart
   List<String> allData = [data0, data1, data2];
-  List<AudiosTagModel> song = await OnAudioEdit().readAudios(allData);
+  List<AudioModel> song = await _audioEdit.readAudios(allData);
   ...
-  var songTitle1 = song[1].title;
-  var songTitle2 = song[2].title;
-  var songTitle3 = song[3].title;
+  String songTitle1 = song[0].title;
+  String songTitle2 = song[1].title;
+  String songTitle3 = song[2].title;
 ```
 
 #### readSingleAudioTag
 ```dart
-  String title = await OnAudioEdit().readSingleAudioTag(data, TagsType.TITLE);
+  String title = await _audioEdit.readSingleAudioTag(data, TagsType.TITLE);
   print(title); // Ex: Heavy, California
   ...
-  String artist = await OnAudioEdit().readSingleAudioTag(data, TagsType.ARTIST);
+  String artist = await _audioEdit.readSingleAudioTag(data, TagsType.ARTIST);
   print(artist); // Ex: Jungle
 ```
 
@@ -161,10 +170,10 @@ This method read all possible info from a audio. See all list in: [AllTags](http
     TagsType.TITLE,
     TagsType.ARTIST
   ];
-  var songSpecifics = await OnAudioEdit().readSpecificsAudioTags(data, tags);
+  AudioModel songSpecifics = await _audioEdit.readSpecificsAudioTags(data, tags);
   ...
-  var songTitle = songSpecifics["TITLE"];
-  var songArtist = songSpecifics["ARTIST"];
+  String songTitle = songSpecifics.title;
+  String songArtist = songSpecifics ?? '<No Artist>';
 ```
 
 #### editAudio
@@ -173,7 +182,7 @@ This method read all possible info from a audio. See all list in: [AllTags](http
     TagsType.TITLE: "New Title",
     TagsType.ARTIST: "New Artist"
   };
-  bool song = await OnAudioEdit().editAudio(data, tags);
+  bool song = await _audioEdit.editAudio(data, tags);
   print(song); //True or False
 ```
 
@@ -193,16 +202,16 @@ This method read all possible info from a audio. See all list in: [AllTags](http
   data.add(song1);
   data.add(song2);
   data.add(song3);
-  bool result = await OnAudioEdit().editAudios(data, tags);
+  bool result = await _audioEdit.editAudios(data, tags);
   print(result); //True or False
 ```
 
-#### editAudio
+#### editArtwork
 ⚠ **Note: If openFilePicker is false, imagePath can't be null.**
 ```dart
   // Parameters: openFilePicker, imagePath, format, size, description
   // DEFAULT: true, null, ArtworkFormat.JPEG, 24, "artwork"
-  bool song = await OnAudioEdit().editArtwork(data);
+  bool song = await _audioEdit.editArtwork(data);
   print(song); //True or False
 ```
 
