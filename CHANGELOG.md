@@ -1,13 +1,23 @@
+## [1.3.0] - [10.23.2021]
+### Features
+- **[Added]** `[getUri]` used to retrive the user selected folder path. - [#10](https://github.com/LucasPJS/on_audio_edit/issues/10)
+
+### Fixes
+- **[Fixed]** wrong value returning from String parameters when using any `read` method that require `[AudioModel]`. - [#9](https://github.com/LucasPJS/on_audio_edit/issues/9)
+
+### Documentation
+- Updated `README` documentation.
+
 ## [1.2.0] - [10.22.2021]
 ### Features
-- **[Added]** option to search inside all folders when using `[editAudio]` on Android 10 or above. - [#5](https://github.com/LucasPJS/on_audio_query/issues/5)
+- **[Added]** option to search inside all folders when using `[editAudio]` on Android 10 or above. - [#5](https://github.com/LucasPJS/on_audio_edit/issues/5)
 - **[Added]** `ALL` possible tag type.
 - **[Added]** `ALL` possible getter to `[AudioModel]`.
 - **[Created]** `[ImageModel]`.
 
 ### Fixes
-- **[Fixed]** no ALBUM tag in TagType. - [#2](https://github.com/LucasPJS/on_audio_query/issues/2)
-- **[Fixed]** bug with permission methods. - [#4](https://github.com/LucasPJS/on_audio_query/issues/4)
+- **[Fixed]** no ALBUM tag in TagType. - [#2](https://github.com/LucasPJS/on_audio_edit/issues/2)
+- **[Fixed]** bug with permission methods. - [#4](https://github.com/LucasPJS/on_audio_edit/issues/4)
 
 ### Documentation
 - Updated `README` documentation.
@@ -18,7 +28,7 @@
 
 ### ⚠ Important Changes
 #### Dart
-- Now `[getImage]` a `[ImageModel]`. - [#1](https://github.com/LucasPJS/on_audio_query/issues/1)
+- Now `[getImage]` a `[ImageModel]`. - [#1](https://github.com/LucasPJS/on_audio_edit/issues/1)
 - Now `[readAudio]`, `[readAllAudio ]` and  `[readSpecificsAudioTags]` return type from `Map` to `AudioModel`.
 
 #### @Deprecated
@@ -129,7 +139,7 @@
  -->
 
 <!-- 
- https://github.com/LucasPJS/on_audio_query/issues/
+ https://github.com/LucasPJS/on_audio_edit/issues/
  - **[Added]** (Text)- [#Issue](Link)
  - **[Fixed]** (Text)- [#Issue](Link)
  - **[Changed]** (Text)- [#Issue](Link)
