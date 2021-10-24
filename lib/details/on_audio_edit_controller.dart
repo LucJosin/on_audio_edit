@@ -459,6 +459,14 @@ class OnAudioEdit {
     return ImageModel(resultImage);
   }
 
+  /// Used to return the uri(if exist) from the folder selected from user.
+  /// This uri will be avalible after [requestComplexPermission] or [editAudio] when
+  /// using Android 10 or above.
+  Future<String?> getUri() async {
+    final String? resultUri = await _channel.invokeMethod('getUri');
+    return resultUri;
+  }
+
   /// Used to return a converted value from file length.
   double convertLengthToMb(int length, bool roundNum) {
     var num = roundNum == true ? 100 : 10;

@@ -73,15 +73,35 @@ class OnAudioEdit10(private val context: Context, private val activity: Activity
     private suspend fun doEverythingInBackground(): Boolean = withContext(Dispatchers.IO) {
         val internalData = File(data)
 
-        // Get and check if uri is null.
-        val uriFolder = Uri.parse(getUri()) ?: return@withContext false
+        // At this point, we already requested the 'special' path to user folder.
+        // If not, return false and a warn.
+        if (getUri() == null) {
+            Log.w("on_audio_exception", "Uri to folder path doesn't exist!")
+            return@withContext false
+        }
+
+        // Get the 'extra' uri.
+        val uriFolder: Uri = Uri.parse(getUri())
 
         // Use DocumentFile to navigate and find specific data inside specific folder.
         // We need this, cuz google blocked some access in Android >= 10/Q
         val pUri: Uri
         val dFile = DocumentFile.fromTreeUri(context, uriFolder) ?: return@withContext false
         // [getFile] will give a slow performance, so, we use Kotlin Coroutines and "doEverythingInBackground"
-        pUri = getFile(dFile, internalData)?.uri ?: return@withContext false
+        val file = getFile(dFile, internalData)?.uri
+
+        //
+        if (file == null) {
+            Log.w(
+                "on_audio_exception",
+                "File: $data not found!\n " +
+                        "Call [resetComplexPermission] and let the user choose the \"Root\" folder."
+            )
+            return@withContext false
+        }
+
+        // After checking that [file] is valid, keep the editing.
+        pUri = file
 
         // Temp file just to write(rewrite) file path. Produce the same result as "scan"
         val temp = File.createTempFile("tmp-media", '.' + Utils.getExtension(internalData))

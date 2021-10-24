@@ -67,6 +67,12 @@ class OnAudioEditPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
         Manifest.permission.WRITE_EXTERNAL_STORAGE
     )
 
+    // Check if plugin already has uri.
+    private fun getUri(): String? = activity.getSharedPreferences(
+        "on_audio_edit",
+        Context.MODE_PRIVATE
+    ).getString(onSharedPrefKeyUriCode, null)
+
     // This is only important for initialization
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         this.context = flutterPluginBinding.applicationContext
@@ -88,6 +94,9 @@ class OnAudioEditPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
 
         // Check Basics Permissions
         when (call.method) {
+            // The the special uri used to edit files on Android 10 or above
+            "getUri" -> result.success(getUri())
+
             // Permissions methods
             "permissionsStatus" -> result.success(checkSimplePermissions())
 

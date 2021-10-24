@@ -101,13 +101,6 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                         // * Edit audio artwork.
                         onTap: () => optionsDialog(context, index),
                         // [onLongPress] will read all information about selected items:
-                        onLongPress: () async {
-                          var result = await _audioEdit.readAudio(
-                            songList[index].data,
-                          );
-                          // Print the result.
-                          debugPrint('$result');
-                        },
                         title: Text(songList[index].title),
                         subtitle: Text(
                           songList[index].artist ?? '<No artist>',
@@ -170,7 +163,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                   title: const Text("Edit Artwork"),
                   onTap: () async {
                     Navigator.pop(context);
-                    result = await OnAudioEdit().editArtwork(
+                    result = await _audioEdit.editArtwork(
                       songList[index].data,
                     );
                     setState(() {
@@ -224,7 +217,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                   TagType.ARTIST: artist.text,
                 };
                 Navigator.pop(context);
-                result = await OnAudioEdit().editAudio(
+                result = await _audioEdit.editAudio(
                   songList[index].data,
                   tag,
                 );
