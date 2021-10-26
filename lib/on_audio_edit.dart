@@ -28,6 +28,5 @@ part 'details/types/tag_type.dart';
 part 'details/types/artwork_type.dart';
 
 // Models
-part 'details/models/audios_model.dart';
 part 'details/models/audio_model.dart';
 part 'details/models/image_model.dart';

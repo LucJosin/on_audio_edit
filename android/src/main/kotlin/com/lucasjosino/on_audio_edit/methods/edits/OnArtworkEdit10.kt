@@ -31,17 +31,23 @@ class OnArtworkEdit10(private val context: Context, private val activity: Activi
     // Main parameters
     private val channelError = "on_audio_error"
     private val onSharedPrefKeyUriCode = "on_audio_edit_uri"
+    private var searchInsideFolders: Boolean = false
     private lateinit var uri: Uri
     private lateinit var call: MethodCall
 
     // Check if plugin already has uri.
-    private fun getUri() : String? = activity.getSharedPreferences("on_audio_edit",
-            Context.MODE_PRIVATE).getString(onSharedPrefKeyUriCode, "")
+    private fun getUri(): String? = activity.getSharedPreferences(
+        "on_audio_edit",
+        Context.MODE_PRIVATE
+    ).getString(onSharedPrefKeyUriCode, "")
 
     //
     fun editArtwork(result: MethodChannel.Result, call: MethodCall, uri: Uri?) {
         // This will write in file removing all unnecessary info.
         TagOptionSingleton.getInstance().isId3v2PaddingWillShorten = true
+
+        //
+        this.searchInsideFolders = call.argument<Boolean>("searchInsideFolders")!!
         this.uri = uri ?: Uri.parse(call.argument<String>("imagePath")!!)
         this.call = call
 
@@ -56,7 +62,7 @@ class OnArtworkEdit10(private val context: Context, private val activity: Activi
     }
 
     @Suppress("BlockingMethodInNonBlockingContext")
-    private suspend fun doEverythingInBackground() : Boolean = withContext(Dispatchers.IO) {
+    private suspend fun doEverythingInBackground(): Boolean = withContext(Dispatchers.IO) {
         // Get all information from Dart.
         val data = call.argument<String>("data")!!
         val type = checkArtworkFormat(call.argument<Int>("type")!!)
@@ -66,16 +72,35 @@ class OnArtworkEdit10(private val context: Context, private val activity: Activi
         //
         val internalData = File(data)
 
-        // Get and check if uri is null.
-        val uriFolder = Uri.parse(getUri()) ?: return@withContext false
+        // At this point, we already requested the 'special' path to user folder.
+        // If not, return false and a warn.
+        if (getUri() == null) {
+            Log.w("on_audio_exception", "Uri to folder path doesn't exist!")
+            return@withContext false
+        }
+
+        // Get the 'extra' uri.
+        val uriFolder: Uri = Uri.parse(getUri())
 
         // Use DocumentFile to navigate and find specific data inside specific folder.
         // We need this, cuz google blocked some access in Android >= 10/Q
-        var pUri: Uri = Uri.parse("") // This can be null but, we use inside try / catch
-        val dFile = DocumentFile.fromTreeUri(context, uriFolder)
-        // [findFile] will give a slow performance, so, we use Kotlin Coroutines and "doEverythingInBackground"
-        val fileList = dFile!!.findFile(internalData.name)
-        if (fileList != null) pUri = fileList.uri
+        val pUri: Uri
+        val dFile = DocumentFile.fromTreeUri(context, uriFolder) ?: return@withContext false
+        // [getFile] will give a slow performance, so, we use Kotlin Coroutines and "doEverythingInBackground"
+        val file = getFile(dFile, internalData)?.uri
+
+        //
+        if (file == null) {
+            Log.w(
+                "on_audio_exception",
+                "File: $data not found!\n " +
+                        "Call [resetComplexPermission] and let the user choose the \"Root\" folder."
+            )
+            return@withContext false
+        }
+
+        // After checking that [file] is valid, keep the editing.
+        pUri = file
 
         // Temp file just to write(rewrite) file path. Produce the same result as "scan"
         val temp = File.createTempFile("tmp-media", '.' + Utils.getExtension(internalData))
@@ -97,7 +122,7 @@ class OnArtworkEdit10(private val context: Context, private val activity: Activi
         artwork.pictureType = PictureTypes.DEFAULT_ID
         artwork.mimeType = type
         artwork.description = description
-        artwork.height = size ; artwork.width = size
+        artwork.height = size; artwork.width = size
 
         //
         audioTag.setField(artwork)
@@ -105,7 +130,9 @@ class OnArtworkEdit10(private val context: Context, private val activity: Activi
 
         try {
             AudioFileIO.write(audioFile)
-        } catch (e: Exception) { Log.i(channelError, e.toString()) }
+        } catch (e: Exception) {
+            Log.i(channelError, "$e")
+        }
 
         // Start setup to write in folder
         // Until this moment we only write inside audio file, but we need tell android that this file has some change.
@@ -129,17 +156,11 @@ class OnArtworkEdit10(private val context: Context, private val activity: Activi
                 }
             }
         } catch (e: Exception) {
-            Log.i("on_audio_exception", e.toString())
-            temp.delete()
-            return@withContext false
+            Log.i("on_audio_exception", "$e")
         } catch (f: FileNotFoundException) {
-            Log.i("on_audio_FileNotFound", f.toString())
-            temp.delete()
-            return@withContext false
+            Log.i("on_audio_FileNotFound", "$f")
         } catch (io: IOException) {
-            Log.i("on_audio_IOException", io.toString())
-            temp.delete()
-            return@withContext false
+            Log.i("on_audio_IOException", "$io")
         }
 
         // Delete temp folder.
@@ -149,7 +170,7 @@ class OnArtworkEdit10(private val context: Context, private val activity: Activi
 
     @Suppress("DEPRECATION")
     //
-    private fun findImage(uri: Uri) : String {
+    private fun findImage(uri: Uri): String {
         val projection = arrayOf(MediaStore.Images.Media.DATA)
         val cursor = context.contentResolver.query(uri, projection, null, null, null)
 
@@ -161,5 +182,19 @@ class OnArtworkEdit10(private val context: Context, private val activity: Activi
         }
         cursor?.close()
         return imageData
+    }
+
+    private fun getFile(directory: DocumentFile, specificFile: File): DocumentFile? {
+        val files = directory.listFiles()
+        for (file in files) {
+            val data: DocumentFile? = if (file.isDirectory) {
+                // If [searchInsideFolders] is true, we keep searching, if not, no file was found.
+                if (searchInsideFolders) getFile(file, specificFile) else return null
+            } else {
+                if (file.name == specificFile.name) file else null
+            }
+            if (data != null) return data
+        }
+        return null
     }
 }

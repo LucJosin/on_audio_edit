@@ -1,5 +1,6 @@
 package com.lucasjosino.on_audio_edit.methods.read
 
+import com.lucasjosino.on_audio_edit.extensions.checkFlac
 import com.lucasjosino.on_audio_edit.extensions.tryInt
 import com.lucasjosino.on_audio_edit.types.checkTag
 import com.lucasjosino.on_audio_edit.utils.checkAndGetExtraInfo
@@ -25,7 +26,7 @@ class OnAudioRead {
 
         // Getting all tags
         val tagsData: MutableMap<String, Any?> = HashMap()
-        for (tag in getAllProjection()) {
+        for (tag in getAllProjection().checkFlac(data)) {
             val value = audioTag.getValue(tag, 0)
             if (!value.isNullOrEmpty()) {
                 tagsData[tag.name] = value.tryInt(tag.ordinal)
@@ -56,7 +57,7 @@ class OnAudioRead {
 
             // Getting all tags
             val tagsData: MutableMap<String, Any?> = HashMap()
-            for (tag in getAllProjection()) {
+            for (tag in getAllProjection().checkFlac(pathData)) {
                 val value = audioTag.getValue(tag, 0)
                 if (!value.isNullOrEmpty()) {
                     tagsData[tag.name] = value.tryInt(tag.ordinal)
@@ -133,4 +134,6 @@ class OnAudioRead {
         // Sending to Dart
         result.success(tagsData)
     }
+
+
 }

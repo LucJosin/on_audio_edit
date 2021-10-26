@@ -11,7 +11,7 @@ fun checkAndGetExtraInfo(audioFile: AudioFile) : MutableMap<String, Any?> {
     extraInfo["CHANNELS"] = audioFile.audioHeader.channels
     extraInfo["TYPE"] = audioFile.audioHeader.encodingType
     extraInfo["LENGTH"] = audioFile.file.length()
-    extraInfo["FIRST_ARTWORK"] = audioFile.tag.firstArtwork.binaryData
+    extraInfo["FIRST_ARTWORK"] = audioFile.tag?.firstArtwork?.binaryData
     return extraInfo
 }
 

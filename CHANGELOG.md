@@ -1,3 +1,14 @@
+## [1.4.0] - [10.26.2021]
+### Features
+- **[Added]** `original` parameter to `[getUri]`. Now you can get a `original` or `modified` path. - [#10](https://github.com/LucasPJS/on_audio_edit/issues/10)
+
+### Fixes
+- **[Fixed]** error when tring to read a `Flac` file. - [#11](https://github.com/LucasPJS/on_audio_edit/issues/11)
+- **[Fixed]** error when tring to read a file without `artwork`. - [#12](https://github.com/LucasPJS/on_audio_edit/issues/12)
+
+### Documentation
+- Updated `README` documentation.
+
 ## [1.3.0] - [10.23.2021]
 ### Features
 - **[Added]** `[getUri]` used to retrive the user selected folder path. - [#10](https://github.com/LucasPJS/on_audio_edit/issues/10)

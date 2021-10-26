@@ -114,7 +114,7 @@ class OnAudioEdit10(private val context: Context, private val activity: Activity
         // Setting tags
         for (info in getTagsAndInfo) {
             // If value is null, ignore.
-            val value = info.value.toString()
+            val value = "${info.value}"
             if (value.isNotEmpty()) audioTag.setField(info.key, value)
         }
         audioFile.file = temp
@@ -122,7 +122,7 @@ class OnAudioEdit10(private val context: Context, private val activity: Activity
         try {
             AudioFileIO.write(audioFile)
         } catch (e: Exception) {
-            Log.i(channelError, e.toString())
+            Log.i(channelError, "$e")
         }
 
         // Start setup to write in folder
@@ -140,17 +140,11 @@ class OnAudioEdit10(private val context: Context, private val activity: Activity
                 }
             }
         } catch (e: Exception) {
-            Log.i("on_audio_exception", e.toString())
-            temp.delete()
-            return@withContext false
+            Log.i("on_audio_exception", "$e")
         } catch (f: FileNotFoundException) {
-            Log.i("on_audio_FileNotFound", f.toString())
-            temp.delete()
-            return@withContext false
+            Log.i("on_audio_FileNotFound", "$f")
         } catch (io: IOException) {
-            Log.i("on_audio_IOException", io.toString())
-            temp.delete()
-            return@withContext false
+            Log.i("on_audio_IOException", "$io")
         }
 
         // Delete temp folder.

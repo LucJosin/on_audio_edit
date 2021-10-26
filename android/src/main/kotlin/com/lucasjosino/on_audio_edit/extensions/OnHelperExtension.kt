@@ -1,5 +1,8 @@
 package com.lucasjosino.on_audio_edit.extensions
 
+import android.util.Log
+import org.jaudiotagger.tag.FieldKey
+
 fun String.tryInt(key: Int): Any? {
     return when (key) {
         1,
@@ -29,4 +32,12 @@ fun String.tryInt(key: Int): Any? {
         81 -> this.toIntOrNull()
         else -> this
     }
+}
+
+fun ArrayList<FieldKey>.checkFlac(data: String): ArrayList<FieldKey> {
+    val tmpArray: ArrayList<FieldKey> = this
+    if (data.endsWith(".flac")) {
+        tmpArray.removeAt(19)
+    }
+    return tmpArray
 }

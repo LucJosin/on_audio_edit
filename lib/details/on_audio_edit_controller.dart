@@ -30,7 +30,7 @@ class OnAudioEdit {
       case TagType.TRACK_LENGTH:
       case TagType.SAMPLE_RATE:
       case TagType.ENCODING_TYPE:
-        log('Cannot modifiy [$tag]. Ignoring request');
+        log('Cannot modifiy [$tag]. Removing tag');
         break;
       default:
         break;
@@ -61,15 +61,6 @@ class OnAudioEdit {
       "data": data,
     });
     return AudioModel(resultReadAudio);
-  }
-
-  /// Deprecated after [1.2.0]
-  @Deprecated('Use [readAudio] instead')
-  Future<AudioModel> readAllAudio(
-    String data, {
-    bool searchInsideFolders = false,
-  }) async {
-    return readAudio(data);
   }
 
   /// Used to return multiples songs info.
@@ -176,8 +167,8 @@ class OnAudioEdit {
   ///
   /// * [data] is used for find specific audio data.
   /// * [tags] is used to define what tags and values you want edit.
-  /// * [searchInsideFolders] is used for find specific audio data even inside
-  /// the folders. **(Only required when using Android 10 or above)**
+  /// * [searchInsideFolders] is used for find specific audio data inside the
+  /// folders. **(Only required when using Android 10 or above)**
   ///
   /// Usage:
   ///
@@ -208,7 +199,7 @@ class OnAudioEdit {
   Future<bool> editAudio(
     String data,
     Map<TagType, dynamic> tags, {
-    bool searchInsideFolders = false,
+    bool? searchInsideFolders,
   }) async {
     Map<int, dynamic> finalTags = {};
     tags.forEach((key, value) {
@@ -218,7 +209,7 @@ class OnAudioEdit {
     final bool resultEditAudio = await _channel.invokeMethod("editAudio", {
       "data": data,
       "tags": finalTags,
-      "searchInsideFolders": searchInsideFolders,
+      "searchInsideFolders": searchInsideFolders ?? false,
     });
     return resultEditAudio;
   }
@@ -303,6 +294,8 @@ class OnAudioEdit {
   /// * [format] is used to define image type: [PNG] or [JPEG].
   /// * [size] is used to define image quality.
   /// * [description] is used to define artwork description.
+  /// * [searchInsideFolders] is used for find specific audio data inside the
+  /// folders. **(Only required when using Android 10 or above)**
   ///
   /// Important:
   ///
@@ -314,13 +307,14 @@ class OnAudioEdit {
   /// * If [size] is null, will be set to [24].
   /// * If [description] is null, will be set to ["artwork"].
   Future<bool> editArtwork(
-    String data, [
+    String data, {
     bool? openFilePicker,
     String? imagePath,
     ArtworkFormat? format,
     int? size,
     String? description,
-  ]) async {
+    bool? searchInsideFolders,
+  }) async {
     assert(
         openFilePicker == false || imagePath == null,
         "Cannot change artwork image without image.\n"
@@ -331,7 +325,8 @@ class OnAudioEdit {
       "size": size ?? 24,
       "description": description ?? "artwork",
       "openFilePicker": openFilePicker ?? true,
-      "imagePath": imagePath
+      "imagePath": imagePath,
+      "searchInsideFolders": searchInsideFolders ?? false,
     });
     return resultEditArt;
   }
@@ -444,12 +439,6 @@ class OnAudioEdit {
     return resultReset;
   }
 
-  /// Deprecated after [1.2.0].
-  @Deprecated('Use [getImage] instead.')
-  Future<ImageModel> getImagePath({ArtworkFormat? format, int? quality}) async {
-    return getImage(format: format, quality: quality);
-  }
-
   /// Used to open image folder to user select image and return this [ImageModel].
   Future<ImageModel> getImage({ArtworkFormat? format, int? quality}) async {
     final Map resultImage = await _channel.invokeMethod("getImagePath", {
@@ -462,8 +451,15 @@ class OnAudioEdit {
   /// Used to return the uri(if exist) from the folder selected from user.
   /// This uri will be avalible after [requestComplexPermission] or [editAudio] when
   /// using Android 10 or above.
-  Future<String?> getUri() async {
+  Future<String?> getUri({bool originalPath = false}) async {
     final String? resultUri = await _channel.invokeMethod('getUri');
+    if (!originalPath) {
+      resultUri?.replaceAll(
+        "content://com.android.externalstorage.documents/tree",
+        "",
+      );
+      resultUri?.replaceAll("%3A", "/");
+    }
     return resultUri;
   }
 

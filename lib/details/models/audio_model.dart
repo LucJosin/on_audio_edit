@@ -94,10 +94,6 @@ class AudioModel {
   /// Return song [grouping]
   String? get grouping => _info["GROUPING"];
 
-  /// Deprecated after [1.2.0]
-  @Deprecated("This method will be removed soon")
-  int? get id => _info["ID"];
-
   /// Return song [isrc]
   String? get isrc => _info["ISRC"];
 
@@ -272,7 +268,9 @@ class AudioModel {
   @override
   String toString() {
     var tmpInfo = _info;
-    tmpInfo.update("FIRST_ARTWORK", (value) => "${value.length} (Bytes)");
+    if (tmpInfo["FIRST_ARTWORK"] != null) {
+      tmpInfo.update("FIRST_ARTWORK", (value) => "${value.length} (Bytes)");
+    }
     return tmpInfo.toString();
   }
 }
