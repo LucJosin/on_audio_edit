@@ -1,3 +1,10 @@
+## [1.4.0+1] - [10.26.2021]
+### Fixes
+- **[Fixed]** wrong value returning from `[getUri]`.
+
+### Documentation
+- Updated `README` documentation.
+
 ## [1.4.0] - [10.26.2021]
 ### Features
 - **[Added]** `original` parameter to `[getUri]`. Now you can get a `original` or `modified` path. - [#10](https://github.com/LucasPJS/on_audio_edit/issues/10)

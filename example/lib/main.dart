@@ -220,6 +220,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                 result = await _audioEdit.editAudio(
                   songList[index].data,
                   tag,
+                  searchInsideFolders: true,
                 );
                 setState(() {
                   _controller.forward();

@@ -452,15 +452,17 @@ class OnAudioEdit {
   /// This uri will be avalible after [requestComplexPermission] or [editAudio] when
   /// using Android 10 or above.
   Future<String?> getUri({bool originalPath = false}) async {
-    final String? resultUri = await _channel.invokeMethod('getUri');
+    String? resultUri = await _channel.invokeMethod('getUri');
     if (!originalPath) {
-      resultUri?.replaceAll(
+      resultUri = resultUri?.replaceAll(
         "content://com.android.externalstorage.documents/tree",
         "",
       );
-      resultUri?.replaceAll("%3A", "/");
+      resultUri = resultUri?.replaceAll("primary%3A", "");
+      resultUri = resultUri?.replaceAll("%3A", "/");
+      resultUri = resultUri?.replaceAll("%2F", "/");
     }
-    return resultUri;
+    return resultUri != null ? resultUri + "/" : null;
   }
 
   /// Used to return a converted value from file length.
