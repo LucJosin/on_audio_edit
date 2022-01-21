@@ -42,6 +42,17 @@ class OnAudioRead {
 
     //
     fun readAudios(result: MethodChannel.Result, call: MethodCall) {
+        val separateThread: Boolean = call.argument("separateThread")!!
+        if (separateThread) {
+            Thread {
+                onReadAudios(result, call)
+            }.start()
+        } else {
+            onReadAudios(result, call)
+        }
+    }
+
+    private fun onReadAudios(result: MethodChannel.Result, call: MethodCall) {
         // Get all information from Dart.
         val data: ArrayList<String> = call.argument("data")!!
 
