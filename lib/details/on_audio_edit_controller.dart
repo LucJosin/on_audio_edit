@@ -68,6 +68,7 @@ class OnAudioEdit {
   /// Parameters:
   ///
   /// * [data] is used for find multiples audios data.
+  /// * [mainThread] if `true` execute code in separate thread.
   ///
   /// Usage:
   ///
@@ -83,10 +84,14 @@ class OnAudioEdit {
   /// * Calling any method without [READ] and [WRITE] permission will throw a error.
   ///
   /// Use [permissionsStatus] to see permissions status.
-  Future<List<AudioModel>> readAudios(List<String> data) async {
+  Future<List<AudioModel>> readAudios(
+    List<String> data, {
+    bool separateThread = false,
+  }) async {
     final List<dynamic> resultReadAudio =
         await _channel.invokeMethod("readAudios", {
       "data": data,
+      "separateThread": separateThread,
     });
     return resultReadAudio.map((e) => AudioModel(e)).toList();
   }
