@@ -1,13 +1,13 @@
 /*
 =============
 Author: Lucas Josino
-Github: https://github.com/LucasPJS
+Github: https://github.com/LucJosin
 Website: https://lucasjosino.com/
 =============
 Plugin/Id: on_audio_edit#3
-Homepage: https://github.com/LucasPJS/on_audio_edit
+Homepage: https://github.com/LucJosin/on_audio_edit
 Pub: https://pub.dev/packages/on_audio_edit
-License: https://github.com/LucasPJS/on_audio_edit/blob/main/LICENSE
+License: https://github.com/LucJosin/on_audio_edit/blob/main/LICENSE
 Copyright: © 2021, Lucas Josino. All rights reserved.
 =============
 */

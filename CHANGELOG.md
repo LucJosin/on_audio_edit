@@ -1,3 +1,10 @@
+## [1.5.0] - [01.21.2022]
+### Features
+- **[Added]** `separateThread` parameter to `[readAudios]`. Now you can change the `thread` when reading the audios. - Thanks [@SimoneBressan](https://github.com/SimoneBressan)
+
+### Changes
+- **[Updated]** all Github links.
+
 ## [1.4.0+1] - [10.26.2021]
 ### Fixes
 - **[Fixed]** wrong value returning from `[getUri]`.

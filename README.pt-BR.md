@@ -11,8 +11,8 @@ Esse Plugin usa [AdrienPoupa:jaudiotagger](https://github.com/AdrienPoupa/jaudio
 
 ## Ajuda:
 
-**Algum problema? [Issues](https://github.com/LucasPJS/on_audio_edit/issues)** <br>
-**Alguma sugestão? [Pull request](https://github.com/LucasPJS/on_audio_edit/pulls)**
+**Algum problema? [Issues](https://github.com/LucJosin/on_audio_edit/issues)** <br>
+**Alguma sugestão? [Pull request](https://github.com/LucJosin/on_audio_edit/pulls)**
 
 ### Traduções :
 
@@ -34,7 +34,7 @@ NOTE: Fique à vontade para ajudar nas traduções
 Adicione o seguinte codigo para seu `pubspec.yaml`:
 ```yaml
 dependencies:
-  on_audio_edit: ^1.4.0+1
+  on_audio_edit: ^1.5.0
 ```
 
 #### Solicitar Permissões:
@@ -127,7 +127,7 @@ Todos os tipos de métodos nesse plugin:
 | `ARTISTS` | `ORIGINAL_YEAR` | `LANGUAGE` | `TEMPO` | `CHANNELS` | <br>
 | `BEATS_PER_MINUTE` | `PRODUCER` | `KEY` | `TAGS` | `COVER_ART` | <br>
 | `COMPOSER` | `QUALITY` | `ISRC` | `SUBTITLE` | `TYPE` | <br>
-| `COUNTRY` | `RATING` | `FIRST_ARTWORK` | `LENGTH` | [`More`](https://github.com/LucasPJS/on_audio_edit/blob/main/lib/details/types/tag_type.dart) | <br>
+| `COUNTRY` | `RATING` | `FIRST_ARTWORK` | `LENGTH` | [`More`](https://github.com/LucJosin/on_audio_edit/blob/main/lib/details/types/tag_type.dart) | <br>
 | `GENRE` | `RECORD_LABEL` | `YEAR` | `BITRATE` | <br>
 
 ## Exemplos:
@@ -217,7 +217,7 @@ Todos os tipos de métodos nesse plugin:
 
 ## LICENÇA:
 
-* [LICENÇA  ](https://github.com/LucasPJS/on_audio_edit/blob/main/LICENSE)
+* [LICENÇA  ](https://github.com/LucJosin/on_audio_edit/blob/main/LICENSE)
 
 > * [Voltar ao Topo](#on_audio_edit)
 
