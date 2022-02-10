@@ -30,5 +30,5 @@ flutter:
       android:
         package: com.lucasjosino.on_audio_edit
         pluginClass: OnAudioEditPlugin
-#      ios:
-#        pluginClass: OnAudioEditPlugin
+      ios:
+        pluginClass: OnAudioEditPlugin
