@@ -34,7 +34,7 @@ NOTE: Feel free to help with readme translations
 Add the following code to your `pubspec.yaml`:
 ```yaml
 dependencies:
-  on_audio_edit: ^1.5.0
+  on_audio_edit: ^1.5.1
 ```
 
 #### Request Permission:

@@ -1,3 +1,10 @@
+## [1.5.1] - [02.10.2022]
+### Fixes
+- **[Fixed]** error when reading a flac file with others files.. - Thanks [@SimoneBressan](https://github.com/SimoneBressan)
+
+### Documentation
+- Updated `README` documentation.
+
 ## [1.5.0] - [01.21.2022]
 ### Features
 - **[Added]** `separateThread` parameter to `[readAudios]`. Now you can change the `thread` when reading the audios. - Thanks [@SimoneBressan](https://github.com/SimoneBressan)

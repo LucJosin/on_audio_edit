@@ -1,6 +1,6 @@
 name: on_audio_edit
 description: Flutter Plugin used to edit and read audios/songs infos/tags [Mp3, OggVorbis, Wav, etc...].
-version: 1.5.0
+version: 1.5.1
 homepage: https://github.com/LucJosin/on_audio_edit
 # pub.dev: https://pub.dev/packages/on_audio_query
 # ========
