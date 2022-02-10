@@ -1,6 +1,5 @@
 package com.lucasjosino.on_audio_edit.extensions
 
-import android.util.Log
 import org.jaudiotagger.tag.FieldKey
 
 fun String.tryInt(key: Int): Any? {
@@ -34,10 +33,11 @@ fun String.tryInt(key: Int): Any? {
     }
 }
 
-fun ArrayList<FieldKey>.checkFlac(data: String): ArrayList<FieldKey> {
-    val tmpArray: ArrayList<FieldKey> = this
+fun List<FieldKey>.checkFlac(data: String): List<FieldKey> {
     if (data.endsWith(".flac")) {
-        tmpArray.removeAt(19)
+        val mutableList = this.toMutableList();
+        mutableList.remove(FieldKey.COVER_ART)
+        return mutableList.toList()
     }
-    return tmpArray
+    return this
 }

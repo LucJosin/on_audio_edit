@@ -2,9 +2,9 @@ package com.lucasjosino.on_audio_edit.utils
 
 import org.jaudiotagger.tag.FieldKey
 
-fun getAllProjection() : ArrayList<FieldKey> = allProjection
+fun getAllProjection() : List<FieldKey> = allProjection
 
-private var allProjection = arrayListOf(
+private var allProjection = listOf(
         FieldKey.ACOUSTID_FINGERPRINT, // 0
         FieldKey.ACOUSTID_ID, // 1
         FieldKey.ALBUM, // 2
