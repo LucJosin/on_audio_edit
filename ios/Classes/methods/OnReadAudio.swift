@@ -1,5 +1,4 @@
 import Foundation
-import ID3TagEditor
 import MediaPlayer
 import OSLog
 
@@ -20,7 +19,7 @@ public class OnReadAudio {
             var listOfSongs: [[String: Any?]] = Array()
 
             for uri in data {
-                let url = uri.starts(with: "ipod-library://") ? URL(string: uri)! : URL(fileURLWithPath: uri)
+                let url = URL(string: uri)!
 
                 let file = try! AVAudioFile(forReading: url)
                 let fileFormat = file.fileFormat

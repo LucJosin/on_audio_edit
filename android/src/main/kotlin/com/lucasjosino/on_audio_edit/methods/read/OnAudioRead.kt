@@ -1,5 +1,6 @@
 package com.lucasjosino.on_audio_edit.methods.read
 
+import android.net.Uri
 import com.lucasjosino.on_audio_edit.extensions.checkFlac
 import com.lucasjosino.on_audio_edit.extensions.tryInt
 import com.lucasjosino.on_audio_edit.types.checkTag
@@ -60,8 +61,9 @@ class OnAudioRead {
         val tagsList: ArrayList<MutableMap<String, Any?>> = ArrayList()
 
         // Looping until get the last path
-        for (pathData in data) {
+        for (encodedUri in data) {
             // Setup
+            val pathData = Uri.parse(encodedUri).path!!
             val audioData = File(pathData)
             val audioFile = AudioFileIO.read(audioData)
             val audioTag = audioFile.tag
