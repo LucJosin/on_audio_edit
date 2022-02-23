@@ -119,10 +119,10 @@ class OnAudioEditPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
             }
 
             // Read methods
-            "readAudio" -> OnAudioRead().readAudio(result, call)
-            "readAudios" -> OnAudioRead().readAudios(result, call)
-            "readSingleAudioTag" -> OnAudioRead().readSingleAudioTag(result, call)
-            "readSpecificsAudioTags" -> OnAudioRead().readSpecificsAudioTags(result, call)
+            "readAudio" -> OnAudioRead(context).readAudio(result, call)
+            "readAudios" -> OnAudioRead(context).readAudios(result, call)
+            "readSingleAudioTag" -> OnAudioRead(context).readSingleAudioTag(result, call)
+            "readSpecificsAudioTags" -> OnAudioRead(context).readSpecificsAudioTags(result, call)
 
             // Write methods
             "editAudio" -> {

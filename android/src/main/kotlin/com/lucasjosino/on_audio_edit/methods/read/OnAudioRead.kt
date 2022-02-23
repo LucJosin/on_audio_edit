@@ -1,19 +1,22 @@
 package com.lucasjosino.on_audio_edit.methods.read
 
+import android.content.Context
 import android.net.Uri
+import android.provider.MediaStore
 import com.lucasjosino.on_audio_edit.extensions.checkFlac
 import com.lucasjosino.on_audio_edit.extensions.tryInt
 import com.lucasjosino.on_audio_edit.types.checkTag
 import com.lucasjosino.on_audio_edit.utils.checkAndGetExtraInfo
 import com.lucasjosino.on_audio_edit.utils.getAllProjection
 import com.lucasjosino.on_audio_edit.utils.getExtraInfo
+import com.lucasjosino.on_audio_edit.utils.resolveFileUri
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import org.jaudiotagger.audio.AudioFileIO
 import org.jaudiotagger.tag.FieldKey
 import java.io.File
 
-class OnAudioRead {
+class OnAudioRead(private val context: Context) {
 
     //
     fun readAudio(result: MethodChannel.Result, call: MethodCall) {
@@ -63,7 +66,8 @@ class OnAudioRead {
         // Looping until get the last path
         for (encodedUri in data) {
             // Setup
-            val pathData = Uri.parse(encodedUri).path!!
+            val uri = Uri.parse(encodedUri)
+            var pathData = resolveFileUri(context, uri)
             val audioData = File(pathData)
             val audioFile = AudioFileIO.read(audioData)
             val audioTag = audioFile.tag

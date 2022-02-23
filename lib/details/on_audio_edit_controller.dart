@@ -80,8 +80,8 @@ class OnAudioEdit {
   /// Parameters:
   ///
   /// * [uris] is used for find multiples audios data.
-  ///     - `Ios` support `file://` and `ipod-library://` schemes
-  ///     - `Android` support `file://` scheme
+  ///     - `Ios` support `file` and `ipod-library` schemes
+  ///     - `Android` support `file` and `content` schemes
   /// * [mainThread] if `true` execute code in separate thread.
   ///
   /// Usage:
