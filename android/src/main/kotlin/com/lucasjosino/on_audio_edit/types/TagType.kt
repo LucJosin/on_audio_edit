@@ -1,6 +1,7 @@
 package com.lucasjosino.on_audio_edit.types
 
 import org.jaudiotagger.tag.FieldKey
+import org.jaudiotagger.tag.Tag
 
 fun checkTag(tag: Int): FieldKey? {
     return when (tag) {
@@ -88,4 +89,8 @@ fun checkTag(tag: Int): FieldKey? {
         81 -> FieldKey.YEAR // 81
         else -> null
     }
+}
+
+fun Tag.getValueOrNull(key: FieldKey, n: Int): String? {
+    return if (this.hasField(key)) this.getValue(key, n) else null
 }

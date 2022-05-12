@@ -63,11 +63,25 @@ class OnAudioEdit {
     return AudioModel(resultReadAudio);
   }
 
+  /// See [readUriAudios]
+  @Deprecated('In favour of [readUriAudios]')
+  Future<List<AudioModel>> readAudios(
+    List<String> data, {
+    bool separateThread = false,
+  }) async {
+    return readUriAudios(
+      data.map((path) => Uri.file(path)).toList(),
+      separateThread: separateThread,
+    );
+  }
+
   /// Used to return multiples songs info.
   ///
   /// Parameters:
   ///
-  /// * [data] is used for find multiples audios data.
+  /// * [uris] is used for find multiples audios data.
+  ///     - `Ios` support `file` and `ipod-library` schemes
+  ///     - `Android` support `file` and `content` schemes
   /// * [mainThread] if `true` execute code in separate thread.
   ///
   /// Usage:
@@ -84,13 +98,18 @@ class OnAudioEdit {
   /// * Calling any method without [READ] and [WRITE] permission will throw a error.
   ///
   /// Use [permissionsStatus] to see permissions status.
-  Future<List<AudioModel>> readAudios(
-    List<String> data, {
+  ///
+  /// Platforms:
+  ///
+  /// |   Android   |   IOS   |   Web   |
+  /// |------ ------|---------|---------|
+  /// |    `✔️`     |  `✔️`   |  `❌`   |
+  Future<List<AudioModel>> readUriAudios(
+    List<Uri> uris, {
     bool separateThread = false,
   }) async {
-    final List<dynamic> resultReadAudio =
-        await _channel.invokeMethod("readAudios", {
-      "data": data,
+    final List<dynamic> resultReadAudio = await _channel.invokeMethod("readAudios", {
+      "data": uris.map((uri) => uri.toString()).toList(),
       "separateThread": separateThread,
     });
     return resultReadAudio.map((e) => AudioModel(e)).toList();
@@ -119,8 +138,7 @@ class OnAudioEdit {
   ///
   /// Use [permissionsStatus] to see permissions status.
   Future<String> readSingleAudioTag(String data, TagType tag) async {
-    final String resultSingleAudioTag =
-        await _channel.invokeMethod("readSingleAudioTag", {
+    final String resultSingleAudioTag = await _channel.invokeMethod("readSingleAudioTag", {
       "data": data,
       "tag": tag.index,
     });
@@ -152,8 +170,7 @@ class OnAudioEdit {
   /// * Calling any method without [READ] and [WRITE] permission will throw a error.
   ///
   /// Use [permissionsStatus] to see permissions status.
-  Future<AudioModel> readSpecificsAudioTags(
-      String data, List<TagType> tags) async {
+  Future<AudioModel> readSpecificsAudioTags(String data, List<TagType> tags) async {
     List<int> tagsIndex = [];
     for (var it in tags) {
       tagsIndex.add(it.index);
@@ -348,8 +365,7 @@ class OnAudioEdit {
   /// * This method only works on Android 9 or below (later i will add support android 10).
   /// * If return true delete works, else delete found a problem.
   Future<bool> deleteArtwork(String data) async {
-    final bool resultDeleteArt =
-        await _channel.invokeMethod("deleteArtwork", {"data": data});
+    final bool resultDeleteArt = await _channel.invokeMethod("deleteArtwork", {"data": data});
     return resultDeleteArt;
   }
 

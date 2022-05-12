@@ -244,6 +244,9 @@ class AudioModel {
   /// Return song [bitrate]
   int? get bitrate => _info["BITRATE"];
 
+  /// Return song [bitDepth]
+  int? get bitDepth => _info["BIT_DEPTH"];
+
   /// Return song [channels]
   String? get channels => _info["CHANNELS"];
 

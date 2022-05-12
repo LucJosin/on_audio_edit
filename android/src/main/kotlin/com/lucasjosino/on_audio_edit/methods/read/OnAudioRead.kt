@@ -1,18 +1,24 @@
 package com.lucasjosino.on_audio_edit.methods.read
 
+import android.content.Context
+import android.net.Uri
+import android.provider.MediaStore
 import com.lucasjosino.on_audio_edit.extensions.checkFlac
 import com.lucasjosino.on_audio_edit.extensions.tryInt
 import com.lucasjosino.on_audio_edit.types.checkTag
+import com.lucasjosino.on_audio_edit.types.getValueOrNull
 import com.lucasjosino.on_audio_edit.utils.checkAndGetExtraInfo
 import com.lucasjosino.on_audio_edit.utils.getAllProjection
 import com.lucasjosino.on_audio_edit.utils.getExtraInfo
+import com.lucasjosino.on_audio_edit.utils.resolveFileUri
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import org.jaudiotagger.audio.AudioFileIO
 import org.jaudiotagger.tag.FieldKey
+import org.jaudiotagger.tag.Tag
 import java.io.File
 
-class OnAudioRead {
+class OnAudioRead(private val context: Context) {
 
     //
     fun readAudio(result: MethodChannel.Result, call: MethodCall) {
@@ -27,7 +33,7 @@ class OnAudioRead {
         // Getting all tags
         val tagsData: MutableMap<String, Any?> = HashMap()
         for (tag in getAllProjection().checkFlac(data)) {
-            val value = audioTag.getValue(tag, 0)
+            val value = audioTag.getValueOrNull(tag, 0)
             if (!value.isNullOrEmpty()) {
                 tagsData[tag.name] = value.tryInt(tag.ordinal)
             }
@@ -60,16 +66,18 @@ class OnAudioRead {
         val tagsList: ArrayList<MutableMap<String, Any?>> = ArrayList()
 
         // Looping until get the last path
-        for (pathData in data) {
+        for (encodedUri in data) {
             // Setup
+            val uri = Uri.parse(encodedUri)
+            var pathData = resolveFileUri(context, uri)
             val audioData = File(pathData)
             val audioFile = AudioFileIO.read(audioData)
-            val audioTag = audioFile.tag
+            val audioTag: Tag? = audioFile.tag
 
             // Getting all tags
             val tagsData: MutableMap<String, Any?> = HashMap()
             for (tag in getAllProjection().checkFlac(pathData)) {
-                val value = audioTag.getValue(tag, 0)
+                val value = audioTag?.getValueOrNull(tag, 0)
                 if (!value.isNullOrEmpty()) {
                     tagsData[tag.name] = value.tryInt(tag.ordinal)
                 }
@@ -105,7 +113,7 @@ class OnAudioRead {
             87 -> audioFile.audioHeader.sampleRate.toInt()
             88 -> audioFile.audioHeader.encodingType
             else -> {
-                val value = audioTag.getValue(checkTag(tag), 0)
+                val value = audioTag.getValueOrNull(checkTag(tag)!!, 0)
                 if (!value.isNullOrEmpty()) {
                     value.tryInt(tag)
                 } else null
@@ -135,7 +143,7 @@ class OnAudioRead {
 
         //
         val tagsData: MutableMap<String, Any> = HashMap()
-        for (tag in getTags) tagsData[tag.name] = audioTag.getValue(tag, 0).orEmpty()
+        for (tag in getTags) tagsData[tag.name] = audioTag.getValueOrNull(tag, 0).orEmpty()
 
         // Adding extra info using the worst method :P
         tags.forEach {
