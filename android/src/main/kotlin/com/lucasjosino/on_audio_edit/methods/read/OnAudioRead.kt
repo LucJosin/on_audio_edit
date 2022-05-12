@@ -6,6 +6,7 @@ import android.provider.MediaStore
 import com.lucasjosino.on_audio_edit.extensions.checkFlac
 import com.lucasjosino.on_audio_edit.extensions.tryInt
 import com.lucasjosino.on_audio_edit.types.checkTag
+import com.lucasjosino.on_audio_edit.types.getValueOrNull
 import com.lucasjosino.on_audio_edit.utils.checkAndGetExtraInfo
 import com.lucasjosino.on_audio_edit.utils.getAllProjection
 import com.lucasjosino.on_audio_edit.utils.getExtraInfo
@@ -14,6 +15,7 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import org.jaudiotagger.audio.AudioFileIO
 import org.jaudiotagger.tag.FieldKey
+import org.jaudiotagger.tag.Tag
 import java.io.File
 
 class OnAudioRead(private val context: Context) {
@@ -31,7 +33,7 @@ class OnAudioRead(private val context: Context) {
         // Getting all tags
         val tagsData: MutableMap<String, Any?> = HashMap()
         for (tag in getAllProjection().checkFlac(data)) {
-            val value = audioTag.getValue(tag, 0)
+            val value = audioTag.getValueOrNull(tag, 0)
             if (!value.isNullOrEmpty()) {
                 tagsData[tag.name] = value.tryInt(tag.ordinal)
             }
@@ -70,12 +72,12 @@ class OnAudioRead(private val context: Context) {
             var pathData = resolveFileUri(context, uri)
             val audioData = File(pathData)
             val audioFile = AudioFileIO.read(audioData)
-            val audioTag = audioFile.tag
+            val audioTag: Tag? = audioFile.tag
 
             // Getting all tags
             val tagsData: MutableMap<String, Any?> = HashMap()
             for (tag in getAllProjection().checkFlac(pathData)) {
-                val value = audioTag.getValue(tag, 0)
+                val value = audioTag?.getValueOrNull(tag, 0)
                 if (!value.isNullOrEmpty()) {
                     tagsData[tag.name] = value.tryInt(tag.ordinal)
                 }
@@ -111,7 +113,7 @@ class OnAudioRead(private val context: Context) {
             87 -> audioFile.audioHeader.sampleRate.toInt()
             88 -> audioFile.audioHeader.encodingType
             else -> {
-                val value = audioTag.getValue(checkTag(tag), 0)
+                val value = audioTag.getValueOrNull(checkTag(tag)!!, 0)
                 if (!value.isNullOrEmpty()) {
                     value.tryInt(tag)
                 } else null
@@ -141,7 +143,7 @@ class OnAudioRead(private val context: Context) {
 
         //
         val tagsData: MutableMap<String, Any> = HashMap()
-        for (tag in getTags) tagsData[tag.name] = audioTag.getValue(tag, 0).orEmpty()
+        for (tag in getTags) tagsData[tag.name] = audioTag.getValueOrNull(tag, 0).orEmpty()
 
         // Adding extra info using the worst method :P
         tags.forEach {
